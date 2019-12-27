@@ -12,6 +12,7 @@ import ContainerPage from './pages/Container';
 
 import store from './reducers';
 import  {Provider} from 'react-redux';
+import Routes from './routes';
 import './App.scss';
 
 const App: React.FC = () => {
@@ -20,9 +21,9 @@ const App: React.FC = () => {
       <Provider store={store}>
         <Router history={history}>
             <Switch>
-              <Route path="/food" component={FoodPage} exact />
-              <Route path="/containers" component={ContainerPage} exact />
-              <Route path="/" component={Playground} />
+              <Route path={Routes.FOOD_LIST} component={FoodPage} exact />
+              <Route path={Routes.CONTAINERS_LIST} component={ContainerPage} exact />
+              <Route path={Routes.HOME} component={Playground} />
             </Switch>
           <NavBar />
         </Router>

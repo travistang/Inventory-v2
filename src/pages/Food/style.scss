@@ -46,6 +46,7 @@ $lower-card-overflow: 16px;
     border-radius: $corner;
     margin-bottom: -42px;
     height: 100%;
+    // empirical values
     margin-right: -$lower-card-overflow - 8px;
     margin-left: $lower-card-overflow;
 }

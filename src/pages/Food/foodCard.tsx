@@ -1,22 +1,28 @@
 import React from 'react';
+import { withRouter, RouteComponentProps } from 'react-router';
 import { Food } from "../../data/types";
+import Routes from '../../routes';
 import "./style.scss";
 
 type FoodCardProps = {
     food: Food
 }
 
-const FoodCard: React.FC<FoodCardProps> = ({
-    food
+const FoodCard: React.FC<FoodCardProps & RouteComponentProps<any>> = ({
+    food, history
 }) => {
+    const toFoodDetailPage = () => {
+        history.push(Routes.FOOD_DETAILS, { food })
+    }
+
     return (
-        <div className="FoodCard">
+        <div className="FoodCard" onClick={toFoodDetailPage}>
             <div className="FoodCard-Upper">
                 {food.name}
             </div>
             <div className="FoodCard-LowerContainer">
                 <div className="FoodCard-LowerDescription">
-                    {food.containers.length} container(s)
+                    In {food.containers.length} container(s)
                 </div>
                 <div
                     className="FoodCard-Lower">
@@ -27,4 +33,4 @@ const FoodCard: React.FC<FoodCardProps> = ({
     )
 }
 
-export default FoodCard;
+export default withRouter(FoodCard);

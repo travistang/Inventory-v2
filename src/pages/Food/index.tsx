@@ -7,6 +7,7 @@ import { State } from '../../reducers';
 import { connect, MapStateToProps } from 'react-redux';
 import SearchList from '../../components/SearchList';
 import { CenterNoticeSwitch } from '../../components/CenterNotice';
+import Routes from '../../routes';
 
 type FoodPageProps = {
     foods: Array<Food>
@@ -59,7 +60,7 @@ const FoodPage: React.FC<FoodPageProps> = ({
 const FoodPageWithHeader = withHeader(FoodPage, {
     title: "Food",
     navButtons: [
-        {iconName: "add", onClick: () => history.push('/')}
+        {iconName: "add", onClick: () => history.push(Routes.FOOD_ADD)}
     ]
 });
 
