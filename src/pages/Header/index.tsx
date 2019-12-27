@@ -1,5 +1,6 @@
 import React from 'react';
 import { Icon } from '@material-ui/core';
+import { withRouter, RouteComponentProps } from 'react-router';
 import './style.scss';
 
 type NavButtonProps = {
@@ -9,15 +10,25 @@ type NavButtonProps = {
 
 type HeaderProps = {
     title: string,
+    withBackButton?: boolean,
     navButtons?: Array<NavButtonProps>
 };
 
-const Header: React.FC<HeaderProps> = ({
-    title, navButtons
+const HeaderBase: React.FC<HeaderProps & RouteComponentProps<any>> = ({
+    title, navButtons, withBackButton = false,
+    history
 }) => {
     return (
         <div className="Header">
-            {title}
+            <div>
+                {
+                    withBackButton && (
+                            <Icon style={{fontSize: 32}} onClick={() => history.goBack()}>navigate_before</Icon>
+                    )
+                }
+                {title}
+            </div>
+            
             <div className="Header-NavButtonGroup">
                 {
                     navButtons && navButtons.map(({iconName, onClick}) => (
@@ -31,6 +42,7 @@ const Header: React.FC<HeaderProps> = ({
     )
 }
 
+const Header = withRouter(HeaderBase);
 /*
     Add arbitrary page with a header.
     Also provides `setHeaderTitle` to allow the page components to dynamically adjust the title name

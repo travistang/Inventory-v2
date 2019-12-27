@@ -23,7 +23,7 @@ const navItems: Array<NavIconProps> = [
 ];
 
 
-const NavBar: React.FC<RouteComponentProps<any> > = ({
+const NavBar: React.FC<RouteComponentProps<any>> = ({
    location, history
 }) => {
     return (

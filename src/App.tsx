@@ -8,6 +8,8 @@ import NavBar from './pages/Navbar';
 
 // pages
 import FoodPage from './pages/Food';
+import CreateFoodPage from './pages/CreateFood';
+
 import ContainerPage from './pages/Container';
 
 import store from './reducers';
@@ -22,6 +24,7 @@ const App: React.FC = () => {
         <Router history={history}>
             <Switch>
               <Route path={Routes.FOOD_LIST} component={FoodPage} exact />
+              <Route path={Routes.FOOD_ADD} component={CreateFoodPage} exact />
               <Route path={Routes.CONTAINERS_LIST} component={ContainerPage} exact />
               <Route path={Routes.HOME} component={Playground} />
             </Switch>
