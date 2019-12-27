@@ -1,0 +1,17 @@
+@import "../../App.scss";
+
+.Input {
+    border-radius: 16px;
+    background-color: map-get($colors, "primary3");
+    font-size: 16px;
+    border: none;
+    height: 28px;
+    padding: 8px;
+
+    display: flex;
+    align-items: center;    
+}
+
+.Input-Inner {
+    width: 100%;
+}

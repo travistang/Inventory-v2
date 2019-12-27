@@ -1,0 +1,9 @@
+@import "./App.scss";
+@import url('https://fonts.googleapis.com/css?family=PT+Sans+Caption&display=swap');
+
+* {
+  font-family: 'PT Sans Caption', 'sans-serif';
+  font-weight: lighter;
+  font-size: 14px;
+  color: map-get($colors, "text");
+}

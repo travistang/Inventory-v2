@@ -1,0 +1,56 @@
+$colors: (
+  
+  "primary": #506075,
+  "primary2": #191919,
+  "primary3": #303030,
+  "secondary": #A0b7d8,
+  "secondary2": #d5dce5,
+  "info": rgb(245, 120, 2),
+  "text": #cacfd6
+);
+
+h2 {
+  font-size: 36px;
+}
+h3 {
+  font-size: 28px;
+}
+h4 {
+  font-size: 22px;
+}
+h5 {
+  font-size: 16px;
+}
+
+h6 {
+  font-size: 12px;
+}
+
+.App {
+  position: fixed;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  background-color: map-get($colors, "primary2");
+
+  display: flex;
+  flex-direction: column;
+
+}
+
+.Main-Container {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.Page {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  padding-left: 22px;
+  padding-right: 22px;
+}
+

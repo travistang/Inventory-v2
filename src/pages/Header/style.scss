@@ -1,0 +1,19 @@
+.Header {
+    padding: 16px;
+    font-size: 32px;
+    font-weight: bold;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.Header-NavButtonGroup {
+    display: flex;
+    justify-content: flex-end;
+    align-items: stretch;
+}
+
+.Header-NavButton {
+    padding-left: 12px;
+}

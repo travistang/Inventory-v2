@@ -1,0 +1,51 @@
+@import "../../App.scss";
+
+$corner: 8px;
+$height: 112px;
+$half-height: $height / 2;
+$lower-card-overflow: 16px;
+
+.FoodCard {
+    background-color: map-get($colors, "primary3");
+    border-radius: $corner;
+    height: $height;
+    
+    display: flex;
+    flex-direction: column;
+    padding-left: 16px;
+    padding-right: 16px;
+}
+
+.FoodCard-Upper {
+    padding-top: 16px;
+    font-size: 24px;
+}
+
+.FoodCard-LowerContainer {
+    flex: 1;
+    display: flex;
+    align-items: center;
+}
+
+.FoodCard-LowerDescription {
+    display: flex;
+    flex: 1;
+    overflow: hidden;
+    align-items: center;
+    color: adjust-color(map-get($colors, "text"), $lightness: -30%);
+}
+
+.FoodCard-Lower {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 24px;
+    flex: 2;
+    background-color: map-get($colors, "info");
+    color: white;
+    border-radius: $corner;
+    margin-bottom: -42px;
+    height: 100%;
+    margin-right: -$lower-card-overflow - 8px;
+    margin-left: $lower-card-overflow;
+}
