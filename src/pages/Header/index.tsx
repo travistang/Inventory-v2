@@ -14,6 +14,12 @@ type HeaderProps = {
     navButtons?: Array<NavButtonProps>
 };
 
+export type WithHeaderProps = {
+    setNavOptions: (opt: HeaderProps) => void;
+    navOptions: HeaderProps;
+    setHeaderTitle: (newTitle: string) => void;
+}
+
 const HeaderBase: React.FC<HeaderProps & RouteComponentProps<any>> = ({
     title, navButtons, withBackButton = false,
     history
@@ -50,14 +56,17 @@ const Header = withRouter(HeaderBase);
 export const withHeader = (WrappedComponent: React.FC<any>, headerProps: HeaderProps) => {
     const Component = (props: React.Props<any>) => {
         const [ customTitle, setHeaderTitle ] = React.useState(null);
-
+        const [ navOptions, setNavOptions ] = React.useState(headerProps);
         return (
             <>
                 <Header 
-                    {...headerProps} 
+                    {...navOptions} 
                     {...(customTitle && {title: customTitle})} 
                 />
-                <WrappedComponent {...props} setHeaderTitle={setHeaderTitle} />
+                <WrappedComponent {...props} 
+                    navOptions={navOptions}
+                    setNavOptions={setNavOptions}
+                    setHeaderTitle={setHeaderTitle} />
             </>
         )
     }

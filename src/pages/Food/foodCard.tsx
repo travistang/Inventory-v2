@@ -1,22 +1,26 @@
 import React from 'react';
+import { useHistory } from "react-router-dom";
 import { withRouter, RouteComponentProps } from 'react-router';
 import { Food } from "../../data/types";
 import Routes from '../../routes';
 import "./style.scss";
 
 type FoodCardProps = {
-    food: Food
+    food: Food,
+    onClick?: () => void
 }
 
 const FoodCard: React.FC<FoodCardProps & RouteComponentProps<any>> = ({
-    food, history
+    food, onClick
 }) => {
+    const history = useHistory();
     const toFoodDetailPage = () => {
-        history.push(Routes.FOOD_DETAILS, { food })
+        // alert(`food: ${food.id}`);
+        history.push(Routes.FOOD_DETAILS, { food } );
     }
 
     return (
-        <div className="FoodCard" onClick={toFoodDetailPage}>
+        <div className="FoodCard" onClick={onClick || toFoodDetailPage}>
             <div className="FoodCard-Upper">
                 {food.name}
             </div>

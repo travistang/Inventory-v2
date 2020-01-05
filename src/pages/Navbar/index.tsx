@@ -1,6 +1,6 @@
 import React from "react";
 import NavIcon, { NavIconProps } from "./NavIcon";
-import { withRouter, RouteComponentProps } from "react-router-dom";
+import { useLocation, useHistory, RouteComponentProps } from "react-router-dom";
 import Routes from '../../routes';
 import "./style.scss";
 
@@ -23,15 +23,15 @@ const navItems: Array<NavIconProps> = [
 ];
 
 
-const NavBar: React.FC<RouteComponentProps<any>> = ({
-   location, history
-}) => {
+const NavBar: React.FC = () => {
+    const location = useLocation();
+    const history  = useHistory();
     return (
         <div className="NavBarContainer">
             {
                 navItems.map(props => (
                     <div onClick={() => history.push(props.path as string)}>
-                        <NavIcon {...props} active={location.pathname === props.path}  />
+                        <NavIcon {...props} active={(location.pathname[1] || '/').startsWith(props.path[1] || '/')}  />
                     </div>
                 ))
             }
@@ -39,4 +39,4 @@ const NavBar: React.FC<RouteComponentProps<any>> = ({
     )
 }
 
-export default withRouter(NavBar);
+export default NavBar;

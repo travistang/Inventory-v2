@@ -1,0 +1,13 @@
+$margin: 16px;
+
+.Toast {
+    display: flex;
+    align-items: center;
+    position: absolute;
+    border-radius: 8px;
+    top: $margin;
+    height: 36px;
+    left: $margin;
+    right: $margin;
+    padding: $margin;
+}

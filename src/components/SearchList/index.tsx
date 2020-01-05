@@ -12,7 +12,7 @@ type SearchGroupProps<T> = {
         
         minimumSearchLength?: number,
         renderItem: (item: T) => React.ReactNode,
-        inputConfig?: InputConfigProps,
+        inputConfig: InputConfigProps,
         emptyResultConfig?: CenterNoticeProps,
 }
 
@@ -24,7 +24,7 @@ const defaultEmptyResultConfig: CenterNoticeProps = {
 const SearchGroup: React.FC<SearchGroupProps<any>> = ({
     list, filterFunc, renderItem,
     minimumSearchLength = 1,
-    inputConfig = {},
+    inputConfig,
     emptyResultConfig = defaultEmptyResultConfig
 }) => {
     const [searchTerm, setSearchTerm] = React.useState("");
@@ -35,10 +35,11 @@ const SearchGroup: React.FC<SearchGroupProps<any>> = ({
     return (
         <div className="SearchGroup">
             <div className="SearchGroup-Input">
-                <Input 
+                <Input
+                    
                     {...inputConfig} 
                     value={searchTerm} 
-                    onChange={setSearchTerm}
+                    onChange={e => setSearchTerm(e as string)}
                 />
             </div>
             <div className="SearchGroup-List">

@@ -9,6 +9,7 @@ import NavBar from './pages/Navbar';
 // pages
 import FoodPage from './pages/Food';
 import CreateFoodPage from './pages/CreateFood';
+import FoodDetailsPage from './pages/FoodDetails';
 
 import ContainerPage from './pages/Container';
 
@@ -21,15 +22,18 @@ const App: React.FC = () => {
   return (
     <div className="App">
       <Provider store={store}>
-        <Router history={history}>
-            <Switch>
-              <Route path={Routes.FOOD_LIST} component={FoodPage} exact />
-              <Route path={Routes.FOOD_ADD} component={CreateFoodPage} exact />
-              <Route path={Routes.CONTAINERS_LIST} component={ContainerPage} exact />
-              <Route path={Routes.HOME} component={Playground} />
-            </Switch>
-          <NavBar />
-        </Router>
+          <Router history={history}>
+              <div className="Page">
+              <Switch>
+                <Route path={Routes.FOOD_LIST} component={FoodPage} exact />
+                <Route path={Routes.FOOD_ADD} component={CreateFoodPage} exact />
+                <Route path={Routes.CONTAINERS_LIST} component={ContainerPage} exact />
+                <Route path={Routes.FOOD_DETAILS} component={FoodDetailsPage} exact />
+                <Route path={Routes.HOME} component={Playground} />
+              </Switch>
+              </div>
+              <NavBar />
+          </Router>
       </Provider>
     </div>
   );

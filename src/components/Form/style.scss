@@ -1,0 +1,33 @@
+@import "../../App.scss";
+
+.Form {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.Form-Row {
+    display: flex;
+    flex-direction: row;
+    margin-top: 4px;
+    margin-bottom: 4px;
+}
+
+.Form-Col {
+    margin: 8px;
+}
+.Form-Submit {
+    border-radius: 16px;
+    background-color: map-get($colors, "info");
+    color: white;
+    height: 16px;
+    padding: 16px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.Form-Submit-Invalid {
+    background-color: map-get($colors, "primary");
+    color: darken(white, 0.7);
+}

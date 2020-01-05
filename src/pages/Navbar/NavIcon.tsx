@@ -2,9 +2,9 @@ import React from 'react';
 import { Icon } from '@material-ui/core';
 
 export type NavIconProps = {
-    title: String,
-    icon: String,
-    path: String,
+    title: string,
+    icon: string,
+    path: string,
     active?: Boolean
 };
 

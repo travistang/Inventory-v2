@@ -21,11 +21,16 @@ export type BuyFoodOrder = {
     expiryDate?: Date
 }
 
-const initialState: State = { foods: [] };
+const initialState: State = { 
+    foods: [] 
+};
+
 const rootReducers: Reducer<State, Action> = (state: State = initialState, action: Action) => {
     switch(action.type) {
         case "ADD_FOOD":
             const newFood = action.data as Food;
+            console.log('adding food');
+            console.log(newFood);
             return {...state, foods: [...state.foods, newFood]};
         case "BUY_FOOD":
             const { foodID, quantity, price, expiryDate } = action.data as BuyFoodOrder;

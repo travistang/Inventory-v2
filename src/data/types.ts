@@ -19,6 +19,7 @@ export class Location extends Recordable {
     ) {
         super();
     }
+
 }
 
 export type ConsumptionRecord = {
@@ -27,8 +28,21 @@ export type ConsumptionRecord = {
     date: Date,
 }
 
-export type Currency = "EUR" | "USD" | "PLN" | "HKD";
-export type Unit     = "unit" | "g" | "mL";
+export const RawUnit = {
+    unit: "unit",
+    g: "g",
+    mL: "mL"
+}
+
+export const RawCurrency = {
+    EUR: "EUR",
+    USD: "USD",
+    PLN: "PLN",
+    HKD: "HKD",
+}
+
+export type Currency = keyof typeof RawCurrency;
+export type Unit     = keyof typeof RawUnit;
 
 export class Price {
     static toHKDRate = (currency: Currency) => {
@@ -142,19 +156,20 @@ export class FoodContainer extends Recordable {
 export class Food extends Recordable {
     containers: Array<FoodContainer> = [];
     // days to consume, in ms
-    latestTimeToConsumeAfterFirstOpen: number;
+    latestTimeToConsumeAfterFirstOpen: number | null;
     constructor(
         public name: string,
         readonly unit: Unit,
         // days to consume, in days
-        latestDayToConsumeAfterFirstOpen: number
+        latestDayToConsumeAfterFirstOpen: number | null = null
     ) {
         super();
-        this.latestTimeToConsumeAfterFirstOpen 
-            = latestDayToConsumeAfterFirstOpen 
+        this.latestTimeToConsumeAfterFirstOpen = latestDayToConsumeAfterFirstOpen? 
+            (latestDayToConsumeAfterFirstOpen 
                 * 24        // 24 hours in a day
                 * 3600      // 60 minutes * 60 seconds = 3600 seconds per hour
-                * 1000;     // 1000 ms in a second 
+                * 1000)      // 1000 ms in a second 
+            : null;
     }
 
     public buy(quantity: number, price: Price, expiryDate?: Date): FoodContainer {

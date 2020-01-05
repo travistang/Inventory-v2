@@ -13,48 +13,37 @@ type FoodPageProps = {
     foods: Array<Food>
 }
 
-// TODO: remove me
-const sampleFood = new Food(
-    "Bacon", "g", 3
-);
-
-sampleFood.buy(
-    250, new Price(3.14, "PLN")
-);
-
 
 const mapStateToProps:MapStateToProps<FoodPageProps, FoodPageProps, State> = state => ({
-    // foods: state.foods
-    foods: [sampleFood]
+    foods: state.foods
 })
 
 const FoodPage: React.FC<FoodPageProps> = ({
     foods
 }) => {
     return (
-        <div className="Page">
-            <CenterNoticeSwitch watch={foods}
-                iconName="fastfood"
-                title="No food is added"
-                subtitle="click the '+' button to add a new type of food"
+        <CenterNoticeSwitch watch={foods}
+            iconName="fastfood"
+            title="No food is added"
+            subtitle="click the '+' button to add a new type of food"
+        >
+            <SearchList
+                list={foods}
+                filterFunc={
+                    (food, text) => (food as Food).name.toLowerCase().includes(text.toLowerCase())
+                }
+                inputConfig={{
+                    name: "FoodSearchInput",
+                    iconName: "search",
+                    placeholder: "Search for food..."
+                }}
+                minimumSearchLength={2}
+                renderItem={food => <FoodCard food={food as Food} />}
             >
-                <SearchList
-                    list={foods}
-                    filterFunc={
-                        (food, text) => (food as Food).name.toLowerCase().includes(text.toLowerCase())
-                    }
-                    inputConfig={{
-                        iconName: "search",
-                        placeholder: "Search for food..."
-                    }}
-                    minimumSearchLength={2}
-                    renderItem={food => <FoodCard food={food as Food} />}
-                >
 
-                </SearchList>
-            </CenterNoticeSwitch>
-        </div>
-    )
+            </SearchList>
+        </CenterNoticeSwitch>
+    );
 }
 
 const FoodPageWithHeader = withHeader(FoodPage, {
