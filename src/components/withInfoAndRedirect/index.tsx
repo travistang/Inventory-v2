@@ -10,6 +10,7 @@ export type ToastConfig = {
     message: string;
     iconName?: string;
     color: string;
+    state?: any;
 }
 
 const Toast: React.FC<ToastConfig> = ({
@@ -37,11 +38,14 @@ const withInfoAndRedirect = (WrappedComponent: React.FC<ToastInfoAndRedirectConf
             setTimeout(() => setToastConfig(null), time);
         };
 
-        const showToastAndRedirect: (config: ToastConfig, toURL: string, delay: number) => void = (
-            config, toURL, delay
+        const showToastAndRedirect: (
+            config: ToastConfig, toURL: string, delay: number,
+            state?: any
+        ) => void = (
+            config, toURL, delay, state
         ) => {
             setToastConfig(config);
-            setTimeout(() => history.push(toURL), delay);
+            setTimeout(() => history.push(toURL, state), delay);
         }
 
         return (

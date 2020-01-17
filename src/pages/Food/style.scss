@@ -16,6 +16,12 @@ $lower-card-overflow: 16px;
     padding-right: 16px;
 }
 
+.SearchGroup-List > .FoodCard:not(:nth-child(1)) {
+
+    margin-top: $lower-card-overflow * 2;
+    margin-bottom: $lower-card-overflow * 2;
+}
+
 .FoodCard-Upper {
     padding-top: 16px;
     font-size: 24px;

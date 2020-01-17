@@ -1,8 +1,14 @@
+import  { dayToMs, msToDay } from '../utils';
+import md5 from 'blueimp-md5';
+
 export class Recordable {
     readonly id: string;
 
     constructor() {
-        this.id = new Date().getTime().toString();
+        this.id = md5(
+            new Date().getTime().toString() + 
+            Math.random().toString()
+        );
     }
 
     isEqual(other: Recordable): boolean {
@@ -75,8 +81,6 @@ export class FoodContainer extends Recordable {
     quantity: number;
 
     constructor(
-        // the food it is holding
-        readonly itemID: string,
         readonly price:  Price,
         // the max quantity it can hold
         readonly capacity: number,
@@ -120,7 +124,7 @@ export class FoodContainer extends Recordable {
         if (quantity > this.quantity) throw new Error("You cannot consume more food than there is in the container.");
         
         this.quantity -= quantity;
-        const record = { date, quantity, itemID: this.itemID } as ConsumptionRecord;
+        const record = { date, quantity, itemID: this.id } as ConsumptionRecord;
         this.consumptionRecords.push(record);
         return record;
     }
@@ -159,22 +163,30 @@ export class Food extends Recordable {
     latestTimeToConsumeAfterFirstOpen: number | null;
     constructor(
         public name: string,
-        readonly unit: Unit,
+        public unit: Unit,
         // days to consume, in days
         latestDayToConsumeAfterFirstOpen: number | null = null
     ) {
         super();
         this.latestTimeToConsumeAfterFirstOpen = latestDayToConsumeAfterFirstOpen? 
-            (latestDayToConsumeAfterFirstOpen 
-                * 24        // 24 hours in a day
-                * 3600      // 60 minutes * 60 seconds = 3600 seconds per hour
-                * 1000)      // 1000 ms in a second 
+            dayToMs(latestDayToConsumeAfterFirstOpen)
             : null;
+    }
+
+    public latestOpenDays(): number | null {
+        return msToDay(this.latestTimeToConsumeAfterFirstOpen);
+    }
+
+    public updateInfo(
+        name: string, unit: Unit, timeFirstOpen: number | null
+    ) {
+        this.name = name;
+        this.unit = unit;
+        this.latestTimeToConsumeAfterFirstOpen = dayToMs(timeFirstOpen);
     }
 
     public buy(quantity: number, price: Price, expiryDate?: Date): FoodContainer {
         const newContainer = new FoodContainer(
-            this.id,
             price,
             quantity,
             expiryDate,
@@ -185,6 +197,15 @@ export class Food extends Recordable {
         return newContainer;
     }
 
+    public getAllConsumptionRecords(): Array<ConsumptionRecord> {
+        return this.containers.reduce((records : Array<ConsumptionRecord>, container) => [
+            ...records, ...container.consumptionRecords
+        ], []).sort(
+            // order by date
+            (recA, recB) => recA.date.getTime() - recB.date.getTime()
+        );
+    }
+
     public dispose(containerID: string) {
         this.containers = this.containers.filter(con => con.id !== containerID);
     }
@@ -193,10 +214,42 @@ export class Food extends Recordable {
         return this.containers.reduce((sum, con) => sum + con.quantity, 0);
     }
 
+    // TODO: total amount of history also depends on buying...
+    public getTotalAmountHistory(): Array<number> {
+        const consumptionRecords = this.getAllConsumptionRecords();
+        
+        type PurchaseType = { quantity: number, date: Date};
+        const purchaseRecords: Array<PurchaseType> = this.containers.map(
+            ({ capacity, datePurchased}) => ({
+                quantity: -capacity, // because before the purchase the quantity is fewer than before
+                date: datePurchased
+            })
+        );
+        
+        if (consumptionRecords.length === 0) return [0, 0];
+        // a temporary type to help reducing the records
+        type RecordType = PurchaseType | ConsumptionRecord;
+        const allRecords: Array<RecordType> = (consumptionRecords as Array<RecordType>)
+            .concat(purchaseRecords)
+            .sort((recA, recB) => recA.date.getTime() - recB.date.getTime());
+        
+            type ReduceType = { cumsum: number, data: Array<number>};
+        return allRecords.reduceRight(
+            ({cumsum, data}: ReduceType, rec) => {
+                const newAmount = cumsum + rec.quantity;
+                return { cumsum: newAmount, data: [newAmount, ...data]}
+            },
+            // initially the amount is  
+            {cumsum: this.totalAmount(), data: [this.totalAmount()]} as ReduceType
+        ).data;
+    }
+
     public remainingFoodPercentage(): number {
         const totalCapacity = this.containers.reduce((sum, con) => sum + con.capacity, 0);
+        if (totalCapacity === 0) return 0;
         return this.totalAmount() / totalCapacity * 100;
     }
+    
 
     public hasContainerInUrgentConsumptionState(): boolean {
         return this.containers.some(
@@ -209,6 +262,13 @@ export class Food extends Recordable {
     }
 }
 
+export class BuyOrder extends Recordable {
+    foodContainers: Array<FoodContainer> = [];
+    
+    totalAmount(inCurrency: Currency = "EUR") {
+        return this.foodContainers.reduce((total, con) => total.add(con.price), new Price(0, inCurrency));
+    }
+}
 /*
     Container as bags. Such as backpacks, lockers. For reusable and long-lasting items.
 */

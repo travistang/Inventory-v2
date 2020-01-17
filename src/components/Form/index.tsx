@@ -1,5 +1,7 @@
 import React from 'react';
-import { shallowEqual, useSelector } from 'react-redux'
+import { shallowEqual, useSelector } from 'react-redux';
+import { useHistory , useLocation } from 'react-router';
+import { History, Location } from 'history';
 import {Icon} from '@material-ui/core';
 import { State } from '../../reducers';
 import Input, { InputConfigProps, SelectConfigProps, ValueTypes, InputTypes } from '../Input';
@@ -21,7 +23,12 @@ type SelectFormLayoutConfig = BasicLayoutConfig & SelectConfigProps;
 type FormLayoutConfig = BasicLayoutConfig | SelectFormLayoutConfig;
 
 // the entire layout. The first array stores rows. Each row stores columns.
-export type FormLayout = FormLayoutConfig[][] | ((store: State) => FormLayoutConfig[][]);
+export type FormLayout = FormLayoutConfig[][] 
+    | ((
+        store:          State, 
+        history:        History<any>, 
+        location:       Location<any>,
+        initialValues?: FormValueType) => FormLayoutConfig[][]);
 
 //  Type of the props passed to the <Form> Component
 type FormProps = {
@@ -42,7 +49,13 @@ const FormComponent: React.FC<FormProps> = ({
     // see if the incoming layout is a function
     // if it is then pass it to the store ( for validation). Otherwise use it as-is
     const state  = useSelector(state => state, shallowEqual) as State;
-    const layout = (typeof layoutOrLayoutFunc === 'function') ? layoutOrLayoutFunc(state) : layoutOrLayoutFunc;
+    const history = useHistory();
+    const location = useLocation();
+    
+    const layout = (typeof layoutOrLayoutFunc === 'function') 
+        ? layoutOrLayoutFunc(state, history, location, customInitialValue) 
+        : layoutOrLayoutFunc;
+    
     // flatten all fields for easier manipulations
     const allFields = [...layout.reduce((layouts, row) => [...layouts, ...row], [])];
     // the initial values of the form

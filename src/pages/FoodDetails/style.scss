@@ -1,3 +1,5 @@
+@import "../../App.scss";
+
 .FoodDetails-TopSection {
     // flex: 1;
     display: flex;
@@ -12,16 +14,33 @@
     // justify-content: center;
 }
 
+.FoodDetails-TopSection-TrendContainer {
+    display: flex;
+    flex-direction: row;
+    height: 48px;
+    justify-content: center;
+    align-items: center;
+    margin-top: 16px;   
+    margin-bottom: 16px;   
+}
+.FoodDetails-TopSection-TrendContainer > * > .AuxInfo,
+.FoodDetails-TopSection-TrendContainer > * > .AuxInfo > * {
+    color: map-get($colors, "info");
+}
+
 .FoodDetails-TopSection-Title {
     font-size: 32px;
-    text-align: center;
+    // text-align: center;
 }
 
 .FoodDetails-TopSection-AuxInfoRow {
     display: flex;
     flex-direction: row;
     justify-content: space-between;
-    margin-top: 16px;   
+    
+}
+.FoodDetails-TopSection-AuxInfoRow > .AuxInfo {
+    padding: 16px;
 }
 
 .AuxInfo > * {
@@ -31,6 +50,7 @@
     flex: 1;
     justify-content: center;
     align-items: center;
+    
 }
 
 .AuxInfo {

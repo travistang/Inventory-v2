@@ -19,6 +19,11 @@ const navItems: Array<NavIconProps> = [
         title: "Food",
         icon: "fastfood",
         path: Routes.FOOD_LIST
+    },
+    {
+        title: "Buy",
+        icon: "shopping-cart",
+        path: Routes.BUY_FOOD
     }
 ];
 

@@ -1,6 +1,8 @@
 import React from 'react';
+import Trend from 'react-trend';
 import AuxInfo, { AuxInfoProps } from './auxInfo';
-import { Food, FoodContainer } from '../../data/types';
+import { Food } from '../../data/types';
+import TrendLine from '../../components/TrendLine';
 import { withHeader, WithHeaderProps } from '../Header';
 import Routes from '../../routes';
 import { useLocation, useHistory } from "react-router-dom";
@@ -18,14 +20,28 @@ const FoodDetailsPage: React.FC<WithHeaderProps & FoodDetailsProps> = ({
     const history  = useHistory();
     const location = useLocation();
     
-    const food = location.state.food as Food;
-    if (!food) throw new Error("Food must be provided to Food details' page");
-    
     React.useEffect(() => {
         setNavOptions({...navOptions, 
-            navButtons: [{ iconName: "edit", onClick: () => history.push(Routes.FOOD_ADD, { food })}]
+            navButtons: [{ 
+                iconName: "edit", 
+                onClick: () => history.push(
+                    Routes.FOOD_EDIT, { 
+                        food: {
+                            ...food,
+                            dateToUseAfterOpen: food.latestOpenDays()
+                        }
+                })
+            }]
         });
     }, []);
+
+    const food = location.state && (location.state.food as Food);
+    if (!food || !food.totalWorth) {
+        history.push(Routes.CONTAINERS_LIST);
+        return null;
+    }
+    
+ 
     
     // things to render under the main trendbar
     const auxConfigs: Array<AuxInfoProps> = [
@@ -35,9 +51,12 @@ const FoodDetailsPage: React.FC<WithHeaderProps & FoodDetailsProps> = ({
             value: food.containers.length
         },
         {
-            title: 'Amount',
-            iconName: 'fitness_center',
-            value: `${food.totalAmount()} ${food.unit}`
+            title: 'Days to open',
+            iconName: 'calendar',
+            value: (() => {
+                const days = food.latestOpenDays();
+                return days || '--';
+            })()
         },
         {
             title: 'Worth',
@@ -55,6 +74,21 @@ const FoodDetailsPage: React.FC<WithHeaderProps & FoodDetailsProps> = ({
                  <div className="FoodDetails-TopSection-Title">
                     { food.name }
                  </div>
+                 <div className="FoodDetails-TopSection-TrendContainer">
+                    <TrendLine
+                        data={food.getTotalAmountHistory()}
+                    />
+                    <div>
+                        <AuxInfo 
+                            title="Amount" iconName="fitness_center" 
+                            value={`${food.totalAmount()} ${food.unit}`}
+                        />
+                        <AuxInfo
+                            title="Remaining" 
+                            value={`${food.remainingFoodPercentage().toFixed(2)} %`}
+                        />
+                    </div>
+                 </div>
                  <div className="FoodDetails-TopSection-AuxInfoRow">
                      {
                          auxConfigs.map(config => (
@@ -68,7 +102,7 @@ const FoodDetailsPage: React.FC<WithHeaderProps & FoodDetailsProps> = ({
                     watch={food.containers}
                     iconName="kitchen"
                     title="No Containers"
-                    subtitle="Use the buy food function to add containers to this food"
+                    subtitle="Use the buy food function to add containers of this food"
                 >
                     {
                         food.containers.map(({capacity}) => <div>{capacity}</div>)
