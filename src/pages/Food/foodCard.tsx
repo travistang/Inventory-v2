@@ -1,37 +1,46 @@
 import React from 'react';
-import { useHistory } from "react-router-dom";
+import { Icon } from '@material-ui/core';
 import { withRouter, RouteComponentProps } from 'react-router';
-import { Food } from "../../data/types";
-import Routes from '../../routes';
 import "./style.scss";
+import { range } from 'lodash';
 
 type FoodCardProps = {
-    food: Food,
+    name: string,
+    unit: string,
+    info: {
+        totalAmount: number,
+        numberOfContainers: number
+    },
     onClick?: () => void
 }
 
-const FoodCard: React.FC<FoodCardProps & RouteComponentProps<any>> = ({
-    food, onClick
-}) => {
-    const history = useHistory();
-    const toFoodDetailPage = () => {
-        // alert(`food: ${food.id}`);
-        history.push(Routes.FOOD_DETAILS, { food } );
-    }
+const SmallInfo = ({ 
+    icon, value, style 
+}: { icon?: string, value: number | string, style?: any}) => (
+    <div className="FoodCard-SmallInfo" style={style}>
+        { icon && <Icon>{icon}</Icon> }
+        { value }
+    </div>
+);
 
+const FoodCard: React.FC<FoodCardProps & RouteComponentProps<any>> = ({
+    name, unit, info, onClick
+}) => {
     return (
-        <div className="FoodCard" onClick={onClick || toFoodDetailPage}>
-            <div className="FoodCard-Upper">
-                {food.name}
+        <div className="FoodCard" onClick={onClick}>
+            <div className="FoodCard-Left">
+                <div className="FoodCard-name">{name}</div>
+                <div className="FoodCard-containers">
+                    {
+                        info.numberOfContainers ? (range(info.numberOfContainers).map(
+                            () => <Icon>kitchen</Icon>
+                        )) : "No containers left"
+                    }
+                </div>
             </div>
-            <div className="FoodCard-LowerContainer">
-                <div className="FoodCard-LowerDescription">
-                    In {food.containers.length} container(s)
-                </div>
-                <div
-                    className="FoodCard-Lower">
-                    {food.totalAmount()} {food.unit}
-                </div>
+            
+            <div className="FoodCard-Right">
+                <SmallInfo value={`${info.totalAmount} ${unit}`} style={{fontSize: 18}} />
             </div>
         </div>
     )

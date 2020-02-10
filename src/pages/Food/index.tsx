@@ -2,25 +2,43 @@ import React from 'react';
 import FoodCard from './foodCard';
 import { withHeader } from '../Header';
 import history from '../../history';
-import { Food, Price } from "../../data/types";
-import { State } from '../../reducers';
-import { connect, MapStateToProps } from 'react-redux';
+import { Food } from '../../data/typedefs';
 import SearchList from '../../components/SearchList';
 import { CenterNoticeSwitch } from '../../components/CenterNotice';
 import Routes from '../../routes';
+import { useQuery } from '@apollo/react-hooks';
+import { gql } from '@apollo/client';
 
 type FoodPageProps = {
     foods: Array<Food>
 }
 
+const QUERY = gql`
+    {
+        foods @client {
+            name
+            unit
+            info {
+                totalAmount
+                numberOfContainers
+            }
+        }
+    }
+`;
 
-const mapStateToProps:MapStateToProps<FoodPageProps, FoodPageProps, State> = state => ({
-    foods: state.foods
-})
 
-const FoodPage: React.FC<FoodPageProps> = ({
-    foods
-}) => {
+const FoodPage: React.FC<FoodPageProps> = () => {
+    const { loading, error, data } = useQuery(QUERY);
+
+    if (error) {
+        alert(error.message);
+        return null;
+    }
+    if(loading) {
+        return <div> loading...</div>
+    }
+
+    const foods = data.foods as Food[];
     return (
         <CenterNoticeSwitch watch={foods}
             iconName="fastfood"
@@ -38,7 +56,7 @@ const FoodPage: React.FC<FoodPageProps> = ({
                     placeholder: "Search for food..."
                 }}
                 minimumSearchLength={2}
-                renderItem={food => <FoodCard food={food as Food} />}
+                renderItem={food => <FoodCard {...food} onClick={() => history.push(Routes.FOOD_DETAILS)}/>}
             >
 
             </SearchList>
@@ -46,12 +64,11 @@ const FoodPage: React.FC<FoodPageProps> = ({
     );
 }
 
-const FoodPageWithHeader = withHeader(FoodPage, {
+
+export default withHeader(FoodPage, {
     title: "Food",
     navButtons: [
         {iconName: "add", onClick: () => history.push(Routes.FOOD_ADD)}
     ]
 });
-
-export default connect(mapStateToProps, null)(FoodPageWithHeader);
 

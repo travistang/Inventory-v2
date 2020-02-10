@@ -1,6 +1,7 @@
 import React from 'react';
 import { Icon } from '@material-ui/core';
-import { withRouter, RouteComponentProps } from 'react-router';
+import { useHistory } from 'react-router';
+import constate from 'constate';
 import './style.scss';
 
 type NavButtonProps = {
@@ -20,10 +21,26 @@ export type WithHeaderProps = {
     setHeaderTitle: (newTitle: string) => void;
 }
 
-const HeaderBase: React.FC<HeaderProps & RouteComponentProps<any>> = ({
-    title, navButtons, withBackButton = false,
-    history
-}) => {
+// custom hooks
+export function useHeaderHook() {
+    const [ navOptions, setNavOptions] = React.useState({
+        title: "",
+        withBackButton: false
+    } as HeaderProps);
+
+    return { navOptions, setNavOptions } ;
+};
+
+export const [HeaderContextProvider, useHeader] = constate(useHeaderHook);
+
+const Header: React.FC = () => {
+    const { 
+        navOptions: {
+            title, navButtons, withBackButton
+        }
+    } = useHeader();
+
+    const history = useHistory();
     return (
         <div className="Header">
             <div>
@@ -48,29 +65,25 @@ const HeaderBase: React.FC<HeaderProps & RouteComponentProps<any>> = ({
     )
 }
 
-const Header = withRouter(HeaderBase);
-/*
-    Add arbitrary page with a header.
-    Also provides `setHeaderTitle` to allow the page components to dynamically adjust the title name
-*/
-export const withHeader = (WrappedComponent: React.FC<any>, headerProps: HeaderProps) => {
-    const Component = (props: React.Props<any>) => {
-        const [ customTitle, setHeaderTitle ] = React.useState(null);
-        const [ navOptions, setNavOptions ] = React.useState(headerProps);
-        return (
-            <>
-                <Header 
-                    {...navOptions} 
-                    {...(customTitle && {title: customTitle})} 
-                />
-                <WrappedComponent {...props} 
-                    navOptions={navOptions}
-                    setNavOptions={setNavOptions}
-                    setHeaderTitle={setHeaderTitle} />
-            </>
-        )
+export const HeaderContainer: React.FC = ({ children }) => {
+    return (
+        <HeaderContextProvider>
+            <Header/>
+            {children}
+        </HeaderContextProvider>
+    )
+};
+
+export const withHeader = (WrappedComponent : React.FC<any>, newNavOptions : HeaderProps) => {
+    const Component: React.FC = props => {
+        const {setNavOptions} = useHeader();
+        React.useEffect(() => {
+            setNavOptions(newNavOptions);
+        }, []);
+
+        return <WrappedComponent {...props} />
     }
+
     return Component;
 }
-
 export default Header;

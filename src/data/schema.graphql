@@ -1,0 +1,43 @@
+enum Currency {
+    HKD
+    USD
+    EUR
+    PLN
+}
+
+type Price {
+    currency: Currency!,
+    amount: Number!,
+}
+
+type FoodContainer {
+    id: ID!,
+    unit: String!,
+    capacity: Number!,
+    amount: Number!,
+    datePurchased: Date!,
+    expiryDate: Date,
+    dateOpened: Date!,
+    price: Price!
+}
+
+type Food {
+    id: ID!,
+    containers: [FoodContainer!]!,
+    name: String!
+}
+
+type BuyOrder {
+    amount: Number!,
+    unit: String!,
+    price: Price!
+    expiryDate: Date
+}
+
+type Query {
+    getFood(name: String!): Food
+}
+
+type Mutation {
+    buyFood(name: String!, buyOrder: BuyOrder!): FoodContainer
+}

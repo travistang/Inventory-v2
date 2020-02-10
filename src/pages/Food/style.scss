@@ -1,19 +1,19 @@
 @import "../../App.scss";
 
 $corner: 8px;
-$height: 112px;
+$height: 64px;
 $half-height: $height / 2;
 $lower-card-overflow: 16px;
 
 .FoodCard {
-    background-color: map-get($colors, "primary3");
-    border-radius: $corner;
     height: $height;
     
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
     padding-left: 16px;
     padding-right: 16px;
+    margin-top: 16px;
+    margin-bottom: 16px;
 }
 
 .SearchGroup-List > .FoodCard:not(:nth-child(1)) {
@@ -22,37 +22,33 @@ $lower-card-overflow: 16px;
     margin-bottom: $lower-card-overflow * 2;
 }
 
-.FoodCard-Upper {
-    padding-top: 16px;
+.FoodCard-name {
     font-size: 24px;
 }
-
-.FoodCard-LowerContainer {
+.FoodCard-Left {
     flex: 1;
     display: flex;
+    flex-direction: column;
+}
+
+.FoodCard-containers {
+    display: flex;
+    flex-direction: row;
+    color: map-get($colors, "primary3");
+}
+
+.FoodCard-Right {
+    display: flex;
+    flex-direction: column;
+    text-align: right;
+}
+
+.FoodCard-SmallInfo {
+    display: flex;
+    flex-direction: row;
     align-items: center;
 }
 
-.FoodCard-LowerDescription {
-    display: flex;
-    flex: 1;
-    overflow: hidden;
-    align-items: center;
-    color: adjust-color(map-get($colors, "text"), $lightness: -30%);
-}
-
-.FoodCard-Lower {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    font-size: 24px;
-    flex: 2;
-    background-color: map-get($colors, "info");
-    color: white;
-    border-radius: $corner;
-    margin-bottom: -42px;
-    height: 100%;
-    // empirical values
-    margin-right: -$lower-card-overflow - 8px;
-    margin-left: $lower-card-overflow;
+.FoodCard-SmallInfo, .FoodCard-SmallInfo > * {
+    color: map-get($colors, "info");
 }
