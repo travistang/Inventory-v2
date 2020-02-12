@@ -1,5 +1,5 @@
 import React from 'react';
-import FoodCard from './foodCard';
+import FoodCard from '../../components/FoodCard';
 import { withHeader } from '../Header';
 import history from '../../history';
 import { Food } from '../../data/typedefs';

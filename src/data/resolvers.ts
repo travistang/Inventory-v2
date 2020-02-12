@@ -32,8 +32,11 @@ const saveDatabase = (newDb: DataBaseType) => {
 const resolvers = {
     Query: {
         food: (_: any, { name }: { name: string }) => {
+            console.log('resolver get food')
             const db = loadDatabase();
-            return db.foods.find(food => food.name === name) 
+            const food = db.foods.find(food => food.name === name);
+            console.log(food);
+            return food;
         },
         foods: () => {
             const db = loadDatabase();

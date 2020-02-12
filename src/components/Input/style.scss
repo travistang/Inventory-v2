@@ -1,26 +1,37 @@
 @import "../../App.scss";
 
 .Input {
-    border-radius: 16px;
+    // border-radius: 16px;
     background-color: map-get($colors, "primary3");
     font-size: 16px;
     height: 40px;
     border: none;
-    padding: 8px;
-    // padding-top: 8px;
-    // padding-bottom: 8px;
+    padding-left: 8px;
+    padding-top: 8px;
+    padding-bottom: 8px;
 
     display: flex;
     align-items: center;
 }
 
+.Input > *:disabled {
+    opacity: 0.3;
+}
+
 .Input-Inner {
     background-color: map-get($colors, "primary3");
     font-size: 16px;
-    width: 100%;
+    flex: 1;
+    // width: 100%;
     border: none;
 }
 
 .Input.Invalid {
     border: 1px solid red;
+}
+
+.Input-NumberPicker {
+    display: flex;
+    flex-direction: column;
+    width: 24px;
 }

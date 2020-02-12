@@ -21,7 +21,7 @@ const ADD_FOOD_QUERY = gql`
 
 const GET_FOOD_NAMES_QUERY = gql`
     query {
-        getFoods @client {
+        foods @client {
             name
         }
     }

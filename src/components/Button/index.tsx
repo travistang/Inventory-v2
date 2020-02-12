@@ -1,20 +1,25 @@
 import React from 'react';
-import { Color } from '../../data/styles';
 import { Icon } from '@material-ui/core';
 import "./style.scss";
 
 type ButtonProps = {
-    title: String,
-    icon?: String,
-    color?: Color
+    title: string,
+    icon?: string,
+    color?: string,
+    onClick: () => void,
+    disabled?: boolean
 };
 
 const Button: React.FC<ButtonProps> = ({
     title, icon, 
-    color = "primary"
+    color = "primary",
+    onClick,
+    disabled = false
 }) => {
     return (
-        <div className={`Button Button-${color}`}>
+        <div 
+            className={`Button Button-${color} ${disabled? "Button-Disabled":""}`} 
+            onClick={!disabled ? onClick: undefined}>
             {
                 icon && (
                     <Icon>{icon}</Icon>

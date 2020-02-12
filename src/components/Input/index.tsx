@@ -24,6 +24,7 @@ export type SelectConfigProps = {
 export type InputProps = InputConfigProps & {
     value: ValueTypes,
     onChange: (value: ValueTypes) => void,
+    disabled?: boolean
 }
 
 const Input: React.FC<InputProps> = ({
@@ -51,12 +52,11 @@ const Input: React.FC<InputProps> = ({
         rawOnChange(value);
     }
 
-    const valueToDisplay: (value: ValueTypes) => string | number = value => {
+    const valueToDisplay: (value: ValueTypes, type: InputTypes) => string | number = value => {
         if (value instanceof Date) {
             return value.toLocaleString('en-US');
-        } else {
-            return value ? value: "";
-        }
+        } 
+        return value || "";
     }
 
     const finalClassNameOuter = `Input  ${!isValid ? "Invalid" : ""}`;
@@ -73,7 +73,7 @@ const Input: React.FC<InputProps> = ({
             }
             const { options, multiple = false, ...otherProps } = props as SelectConfigProps;
             return (
-                <>
+                <div>
                     {label && <p>{label}</p>}
                     <div className={finalClassNameOuter}>
                         { iconName && <Icon>{iconName} </Icon>}
@@ -83,7 +83,7 @@ const Input: React.FC<InputProps> = ({
                             {...otherProps}
                             className={finalClassName}
                             onChange={e => onChange(e.target.value)}
-                            value={valueToDisplay(value)}
+                            value={valueToDisplay(value, type)}
                         >
                             {placeholder && 
                                 <option value="" selected={value === ""}>{placeholder}</option>
@@ -99,7 +99,7 @@ const Input: React.FC<InputProps> = ({
                         </select>
                         <Icon>expand_more</Icon>
                     </div>
-                </>
+                </div>
             )
         /**
          * 
@@ -119,8 +119,16 @@ const Input: React.FC<InputProps> = ({
                             placeholder={placeholder}
                             onChange={e => onChange(e.target.value)}
                             type={type}
-                            value={valueToDisplay(value)}
+                            value={valueToDisplay(value, type)}
                         />
+                        {
+                            type === 'number' && (
+                                <div className="Input-NumberPicker">
+                                    <Icon onClick={() => onChange((value as number || 0) + 1)}>expand_less</Icon>
+                                    <Icon onClick={() => onChange((value as number || 0) - 1)}>expand_more</Icon>
+                                </div>
+                            )
+                        }
                     </div>
                 </>
             )

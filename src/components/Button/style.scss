@@ -1,7 +1,31 @@
+@import "../../App.scss";
+
 .Button {
     cursor: pointer;
     display: flex;
     flex-direction: row;
     align-items: center;
     justify-content: center;
+    flex: 1;
+    height: 48px;
+    
 }
+
+.Button, .Button > * {
+    color: white;
+}
+
+.Button-Disabled {
+    opacity: 0.5;
+    cursor: default;
+}
+
+@mixin ButtonClass($themeColor) {
+    .Button-#{$themeColor} {
+        background-color: map-get($colors, $themeColor);
+    }
+}
+
+@include ButtonClass("primary");
+@include ButtonClass("secondary");
+@include ButtonClass("info");

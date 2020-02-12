@@ -14,13 +14,13 @@ export type FormValueType = {[key: string]: ValueTypes};
 type BasicLayoutConfig = InputConfigProps & {
     label?: string,
     flex?: number,
+    inputStyle?: "default" | "outlined"
 };
 
-// type for the select configs.
-type SelectFormLayoutConfig = BasicLayoutConfig & SelectConfigProps;
 
 // the combined type
-type FormLayoutConfig = BasicLayoutConfig | SelectFormLayoutConfig;
+type SelectInputConfig = BasicLayoutConfig & SelectConfigProps;
+type FormLayoutConfig = BasicLayoutConfig | SelectInputConfig;
 
 // the entire layout. The first array stores rows. Each row stores columns.
 export type FormLayout = FormLayoutConfig[][] 
@@ -36,14 +36,21 @@ type FormProps = {
     initialValue?: FormValueType,
     layout: FormLayout,
     submitIconName?: string,
-    submitButtonText: string,
-    onSubmit?: (form: FormValueType) => void;
+    submitButtonText?: string,
+    onSubmit?: (form: FormValueType) => void,
+    withSubmitButton?: boolean,
+    disabledFields?: (form: FormValueType) => string[],
+    setFormValue?: (form: FormValueType) => void
 }
 
 const FormComponent: React.FC<FormProps> = ({
     initialValue: customInitialValue,
-    layout : layoutOrLayoutFunc, submitIconName, submitButtonText,
-    onSubmit
+    layout : layoutOrLayoutFunc, 
+    submitIconName, submitButtonText,
+    onSubmit,
+    withSubmitButton = true,
+    disabledFields,
+    setFormValue
 }) => {
 
     // see if the incoming layout is a function
@@ -77,6 +84,11 @@ const FormComponent: React.FC<FormProps> = ({
     // the form state 
     const [form, setForm] = React.useState(initialValues);
     
+    React.useEffect(() => {
+        setFormValue && setFormValue(form);
+    }, [form, setFormValue]);
+
+
     const isAllFieldsValid = !allFields.some(({name, required, validate}) => (
         (required && !form[name]) || (validate && !validate(form[name]))
     ));
@@ -85,50 +97,52 @@ const FormComponent: React.FC<FormProps> = ({
     const setField = (field: string, value: ValueTypes) => {
         setForm({...form, [field]: value});
     };
-
+    
+    const allDisabledFieldNames = disabledFields ? disabledFields(form) : [];
     const inputFieldProps = (field: string) => ({
         value: form[field],
-        onChange: (v: ValueTypes) => setField(field, v)
+        onChange: (v: ValueTypes) => setField(field, v),
+        disabled: allDisabledFieldNames.includes(field)
     });
 
     return (
-        <>
-            <div className="Form">
-                {
-                    // create all the rows
-                    layout.map(row => (
-                        <div className="Form-Row">
-                            {
-                                // create all the columns
-                                row.map(({
-                                    // here is each of the form config
-                                    name, 
-                                    flex = 1, 
-                                    ...inputConfigProps
-                                }) => (
-                                    <div className="Form-Col" style={{flex}}>
-                                        <Input
-                                            name={name} 
-                                            {...inputConfigProps} 
-                                            {...inputFieldProps(name)}
-                                        />
-                                    </div>
-                                ))
-                            }
-                            
-                        </div>
-                    ))
-
-                }
-                <div style={{flex: 1}} />
-                <div onClick={(onSubmit && (isAllFieldsValid || undefined)) && (() => onSubmit(form))}
-                    className={`Form-Submit ${!isAllFieldsValid? "Form-Submit-Invalid" : ""}`}
-                >
-                    {submitIconName && <Icon>{submitIconName}</Icon>}
-                    {submitButtonText}
-                </div>
-            </div>
-        </>
+        <div className="Form">
+            {
+                // create all the rows
+                layout.map(row => (
+                    <div className="Form-Row">
+                        {
+                            // create all the columns
+                            row.map(({
+                                // here is each of the form config
+                                name, 
+                                flex = 1, 
+                                ...inputConfigProps
+                            }) => (
+                                <div className="Form-Col" style={{flex}}>
+                                    <Input
+                                        name={name} 
+                                        {...inputConfigProps} 
+                                        {...inputFieldProps(name)}
+                                    />
+                                </div>
+                            ))
+                        }
+                    </div>
+                ))
+            }
+            <div style={{flex: 1}} />
+            {
+                withSubmitButton && (
+                    <div onClick={(onSubmit && (isAllFieldsValid || undefined)) && (() => onSubmit(form))}
+                        className={`Form-Submit ${!isAllFieldsValid? "Form-Submit-Invalid" : ""}`}
+                    >
+                        {submitIconName && <Icon>{submitIconName}</Icon>}
+                        {submitButtonText}
+                    </div>
+                )
+            }
+        </div>
     )
 
 };
