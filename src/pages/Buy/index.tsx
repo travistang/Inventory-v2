@@ -6,7 +6,8 @@ import { BuyOrder } from '../../data/typedefs';
 import "./style.scss";
 import { CenterNoticeSwitch } from '../../components/CenterNotice';
 import PendingOrderCard from './PendingOrderCard';
-import { useHeader, withHeader } from '../Header';
+import PendingInfoSummary from './PendingInfoSummary';
+import { useHeader } from '../Header';
 
 const BuyPage: React.FC = () => {
     const [ openSelectPopup, setOpenSelectPopup] = React.useState(false);
@@ -38,15 +39,24 @@ const BuyPage: React.FC = () => {
                     title="Nothing to buy yet"
                     subtitle="Click the '+' button above to add a new item">
                     {
-                        pendingBuyOrders.map(order => <PendingOrderCard order={order} />)
+                        pendingBuyOrders.map((order, i) => (
+                            <PendingOrderCard order={order} 
+                                actionButton={{
+                                    iconName: 'cancel',
+                                    onClick: () => setPendingBuyOrders(
+                                        // remove this order from the list of pending orders
+                                        pendingBuyOrders.filter((_, j) => i !== j)
+                                    )
+                                }}
+                            />
+                        ))
                     }
                 </CenterNoticeSwitch>
             </div>
             {
-                pendingBuyOrders.length ? (
-                    <div className="BuyPage-SummaryRow">
-                    </div>
-                ) : null
+                !openSelectPopup && (
+                    <PendingInfoSummary orders={pendingBuyOrders} />
+                )
             }
             <div className="BuyPage-Action">
                 <Button disabled={pendingBuyOrders.length === 0} 

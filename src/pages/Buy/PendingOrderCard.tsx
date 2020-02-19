@@ -1,20 +1,40 @@
 import React from 'react';
-import GenericCard from '../../components/GenericCard';
+import GenericCard, { GenericCardExtraProps } from '../../components/GenericCard';
 import { BuyOrder } from '../../data/typedefs';
+import { gql } from '@apollo/client';
+import { useQuery } from '@apollo/react-hooks';
 
-type PendingOrderCardProps = {
+const FOOD_QUERY = gql`
+    query GetFood($name: String!) {
+        food(name: $name) @client {
+            unit
+        }
+    }
+`;
+type PendingOrderCardProps = GenericCardExtraProps & {
     order: BuyOrder
 };
+
 const PendingOrderCard: React.FC<PendingOrderCardProps> = ({
-    order
+    order, ...props
 }) => {
     const { foodName, amount: addAmount, expiryDate } = order;
 
+    const { loading, data, error } = useQuery(FOOD_QUERY, {
+        variables: { name: foodName }
+    });
+    
+    if (error) {
+        alert(error.message);
+        return null;
+    }   
+    if(loading) return null;
     return (
         <GenericCard 
             mainText={foodName}
             smallComponent={expiryDate ? expiryDate.toLocaleString("en-US") : "No expiry date"}
-            rightComponent={addAmount}
+            rightComponent={<div>{`${addAmount} ${data.food.unit}`}</div>}
+            {...props}
         />
     )   
 };

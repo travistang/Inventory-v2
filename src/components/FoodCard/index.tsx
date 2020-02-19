@@ -1,11 +1,11 @@
 import React from 'react';
 import { Icon } from '@material-ui/core';
 import { withRouter, RouteComponentProps } from 'react-router';
-import GenericCard from '../GenericCard';
+import GenericCard, { GenericCardExtraProps } from '../GenericCard';
 
 import { range } from 'lodash';
 
-type FoodCardProps = {
+type FoodCardProps = GenericCardExtraProps & {
     name: string,
     unit: string,
     info: {
@@ -13,7 +13,7 @@ type FoodCardProps = {
         numberOfContainers: number
     },
     onClick?: () => void
-}
+};
 
 const SmallInfo = ({ 
     icon, value, style 
@@ -25,7 +25,7 @@ const SmallInfo = ({
 );
 
 const FoodCard: React.FC<FoodCardProps & RouteComponentProps<any>> = ({
-    name, unit, info, onClick
+    name, unit, info, onClick, ...props
 }) => {
     const rightComponent = <SmallInfo value={`${info.totalAmount} ${unit}`} style={{fontSize: 18}} />;
     const smallComponent = info.numberOfContainers ? (range(info.numberOfContainers).map(
@@ -38,6 +38,7 @@ const FoodCard: React.FC<FoodCardProps & RouteComponentProps<any>> = ({
             rightComponent={rightComponent} 
             smallComponent={smallComponent} 
             onClick={onClick} 
+            {...props}
         />
     )
 }

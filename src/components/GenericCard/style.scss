@@ -32,8 +32,23 @@ $height: 64px;
     display: flex;
     flex-direction: column;
     text-align: right;
+    padding-top: 8px;
 }
 
 .GenericCard-Right, .GenericCard-Right > * {
     color: map-get($colors, "info");
+     
+}
+
+.GenericCard-ActionButton {
+    display: flex;
+    height: 100%;
+    flex-direction: column;
+    align-items: center;
+    padding-right: 16px;
+    padding-top: 4px;
+    span {
+        cursor: pointer;
+        color: map-get($colors, "primary")
+    }
 }

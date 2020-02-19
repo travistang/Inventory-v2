@@ -1,7 +1,15 @@
 import React from 'react';
+import { Icon } from '@material-ui/core';
 import "./style.scss";
 
-type GenericCardProps = {
+export type GenericCardExtraProps = {
+    actionButton?: {
+        iconName: string,
+        onClick: () => void
+    }
+};
+
+export type GenericCardProps = GenericCardExtraProps & {
     mainText: string,
     rightComponent: React.ReactNode,
     smallComponent?: React.ReactNode,
@@ -9,10 +17,20 @@ type GenericCardProps = {
 };
 
 const GenericCard: React.FC<GenericCardProps> = ({
-    mainText, rightComponent, smallComponent, onClick
+    mainText, rightComponent, smallComponent, onClick,
+    actionButton
 }) => {
     return (
         <div className="GenericCard" onClick={onClick}>
+            {
+                actionButton && (
+                    <div className="GenericCard-ActionButton">
+                        <div onClick={actionButton.onClick}>
+                            <Icon >{actionButton.iconName}</Icon>
+                        </div>
+                    </div>
+                )
+            }
             <div className="GenericCard-Left">
                 <div className="GenericCard-MainText">{mainText}</div>
                 <div className="GenericCard-containers">
@@ -24,7 +42,7 @@ const GenericCard: React.FC<GenericCardProps> = ({
                 { rightComponent }
             </div>
         </div>
-    )
+    );
 }
 
 export default GenericCard;

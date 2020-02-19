@@ -5,6 +5,7 @@
     flex: 1;
     display: flex;
     flex-direction: column;
+    overflow-y: scroll;
 }
 
 .BuyPage-Action {
@@ -20,8 +21,8 @@
     position: fixed;
     z-index: 999;
     top: 0;
-    bottom: 0;
     left: 0;
+    bottom: 0;
     right: 0;
 
     background-color: map-get($colors, "primary2");
@@ -30,6 +31,7 @@
     flex: 1;
     display: flex;
     flex-direction: column;
+    overflow-y: scroll;
 }
 
 .StepIndicator-Container {
@@ -38,6 +40,7 @@
     align-items: center;
     margin-left: 22px;
     margin-right: 22px;
+    z-index: 99999;
 };
 
 .StepIndicator-StepComponent, .StepIndicator-StepComponent > .StepIndicator-Line {
@@ -105,10 +108,13 @@ $pendingColor: map-get($colors, "text");
     display: flex;
     flex-direction: column;
     flex: 1;
+    overflow-y: scroll;
 }
 
 .FoodQuantityInfo-Form {
     flex: 1;
+    padding-left: 22px;
+    padding-right: 22px;
 }
 .FoodQuantityInfo-ButtonRow {
     display: flex;
@@ -120,4 +126,38 @@ $pendingColor: map-get($colors, "text");
     height: 72px;
     display: 'flex';
     flex-direction: column;
+    padding: 16px;
+    padding-left: 32px;
+    padding-right: 32px;
+}
+
+.BuyPage-SummaryRow {
+    background-color: map-get($colors, "primary2");
+    height: 96px;
+    z-index: 9999;
+    padding-left: 16px;
+    padding-right: 16px;
+    display: flex;
+    flex-direction: row;
+}
+
+.BuyPage-SummaryRow-Total {
+    text-align: right;
+    
+    display: flex;
+    flex-direction: column;
+    padding-bottom: 16px;
+}
+
+.BuyPage-SummaryRow-Sum {
+    font-size: 24px;
+    color: map-get($colors, "info");
+}
+
+.BuyPage-SummaryRow-Left {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: flex-start;
 }

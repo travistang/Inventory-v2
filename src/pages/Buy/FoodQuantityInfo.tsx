@@ -3,13 +3,14 @@ import Form, { FormLayout, FormValueType } from '../../components/Form';
 
 import Button from '../../components/Button';
 import { BuyOrder, RawCurrency } from '../../data/typedefs';
+import FoodCard from '../../components/FoodCard';
 import { gql } from "@apollo/client";
 import { useQuery } from "@apollo/react-hooks";
 import { Currency } from '../../data/types';
 
 const FOOD_INFO_QUERY = gql`
     query FoodInfo($name: String!) {
-        food(name: $name) {
+        food(name: $name) @client {
             name
             unit
             info {
@@ -28,14 +29,10 @@ type QueryResultType = {
         numberOfContainers: number
     }
 };
-const FoodInfoSummaryComponent: React.FC<QueryResultType> = ({
-    name, unit, info: { totalAmount, numberOfContainers}
-}) => (
+const FoodInfoSummaryComponent: React.FC<QueryResultType> = (props) => (
     <div className="FoodQuantityInfo-Summary">
         <p>You are buying:</p>
-        <div className="FoodQuantityInfo-Summary-Name">
-            {name}
-        </div>
+        <FoodCard {...props} />
     </div>
 );
 
@@ -44,13 +41,13 @@ const formLayout: FormLayout = [
         {
             label: "Container Capcity", type: "number",
             name: "amount", placeholder: "Amount", iconName:"local_mall",
-            required: true, flex: 6,
+            required: true, flex: 2,
             validate: value => !!(value && value > 0)
         },
         {
             label: "# Containers", type: "number",
             name: "containerCount", iconName: "kitchen",
-            required: true, flex: 6,
+            required: true, flex: 1,
             validate: value => !!(value && value > 0)
         }
     ],
@@ -60,12 +57,12 @@ const formLayout: FormLayout = [
             name: "price", iconName: "local_atm",
             required: true,
             validate: value => !!(value && value > 0),
-            flex: 8
+            flex: 2
         },
         {
             label: "Currency", type: "select",
             name: "currency", iconName: "euro",
-            flex: 4,
+            flex: 1,
             options: Object.values(RawCurrency)
         }
     ],
@@ -118,20 +115,14 @@ const FoodQuantityInfoComponent: React.FC<FoodQuantityInfoProps> = ({
     onPreviousStepRequested,
     onInfoProvided
 }) => {
-    const { data } = useQuery(FOOD_INFO_QUERY, {
+    const [ form, setFormValue ] = React.useState(initialValue);
+
+    const { data, loading } = useQuery(FOOD_INFO_QUERY, {
         variables: {
             name: food
         }
     });
-    const [ form, setFormValue ] = React.useState(initialValue);
-
-    React.useEffect(() => {
-        console.log('data changed');
-        console.log(data);
-    }, [data]);
-    React.useEffect(() => {
-        console.log(form);
-    }, [form]);
+    if (loading) return null;
 
     const onSave = () => {
         const {
@@ -153,8 +144,7 @@ const FoodQuantityInfoComponent: React.FC<FoodQuantityInfoProps> = ({
     };
     return (
         <div className="FoodQuantityInfo-Container">
-            
-            { !!data && <FoodInfoSummaryComponent {...data as QueryResultType} /> }
+            { !loading && <FoodInfoSummaryComponent {...data.food as QueryResultType} /> }
             
             <div className="FoodQuantityInfo-Form">
                 <Form withSubmitButton={false} layout={formLayout}
