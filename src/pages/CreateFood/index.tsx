@@ -67,7 +67,8 @@ const CreateFoodPage: React.FC = () => {
         
         toast("Food Added.", {
             position: toast.POSITION.TOP_CENTER,
-            className: "ToastContainer"
+            autoClose: 3000,
+            onClose: () => history.goBack()
         });
         // setTimeout(() => {
         //     history.push(Routes.FOOD_LIST);
@@ -77,6 +78,7 @@ const CreateFoodPage: React.FC = () => {
     return (
         <Form
             submitButtonText="Add Food"
+            submitIconName="add"
             onSubmit={onAddFood}
             layout={formLayout} 
         />

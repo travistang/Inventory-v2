@@ -5,18 +5,19 @@ import {
 } from './typedefs';
 import md5 from 'blueimp-md5';
 
-const localStorageKey = 'db';
+export const localStorageKey = 'db';
 
 interface DataBaseType {
     foods: Array<Food & {[key: string]: any}>
 };
 
+export const initialDatabase : DataBaseType = {
+    foods: []
+};
+
 const loadDatabase = () => {
     const db = localStorage.getItem(localStorageKey);
     if (!db) {
-        const initialDatabase : DataBaseType = {
-            foods: []
-        }
         localStorage.setItem(localStorageKey, 
             JSON.stringify(initialDatabase));
         return initialDatabase;
@@ -77,25 +78,25 @@ const resolvers = {
             buyOrders.forEach(buyOrder => {
                 const { foodName: name, price, expiryDate, amount } = buyOrder;
                 
-                db.foods.forEach(function (food, index) {
-                    if (food.name === name) {
-                        //@ts-ignore
-                        const container = {
-                            __typename: "FoodContainer",
-                            id: md5((new Date()).toString() + name + amount),
-                            capacity: amount,
-                            amount,
-                            dataPurchased: new Date(),
-                            expiryDate, 
-                            dateOpened: null,
-                            price
-                        } as FoodContainer;
-                        
-                        //@ts-ignore
-                        this[index].containers.push(container);
-                        newFoodContainers.push(container);
-                    }
-                });
+                // locate the food this order is referring to
+                const foodId = db.foods.findIndex(food => food.name === name);
+                // add food to the db if it is found
+                if (foodId > 0) {
+                    //@ts-ignore
+                    const container = {
+                        __typename: "FoodContainer",
+                        id: md5((new Date()).toString() + name + amount),
+                        capacity: amount,
+                        amount: Number.parseFloat(amount.toString()),
+                        dataPurchased: new Date(),
+                        expiryDate, 
+                        dateOpened: null,
+                        price
+                    } as FoodContainer;
+
+                    db.foods[foodId].containers.push(container);
+                    newFoodContainers.push(container);
+                }
             });
 
             saveDatabase(db);

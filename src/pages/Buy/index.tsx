@@ -3,11 +3,22 @@ import SelectFoodPopup from './SelectFoodPopup';
 
 import Button from '../../components/Button';
 import { BuyOrder } from '../../data/typedefs';
-import "./style.scss";
 import { CenterNoticeSwitch } from '../../components/CenterNotice';
 import PendingOrderCard from './PendingOrderCard';
 import PendingInfoSummary from './PendingInfoSummary';
 import { useHeader } from '../Header';
+import "./style.scss";
+
+import { gql } from '@apollo/client';
+import { useMutation } from '@apollo/react-hooks';
+
+const ADD_ORDERS = gql`
+    mutation buyFoods($orders: [BuyOrder]!) {
+        buyFood(buyOrders: $orders) @client {
+            id
+        }
+    }
+`;
 
 const BuyPage: React.FC = () => {
     const [ openSelectPopup, setOpenSelectPopup] = React.useState(false);
@@ -25,6 +36,17 @@ const BuyPage: React.FC = () => {
             ]
         });
     }, []);
+
+    const [ buyFoodFunc ] = useMutation(ADD_ORDERS);
+
+    // handler of the final buy button
+    const onSubmitBuyOrders = () => {
+        const containerIds = buyFoodFunc({
+            variables: { orders: pendingBuyOrders}
+        });
+        console.log('buy results');
+        console.log(containerIds);
+    };
 
     return (
         <>
@@ -58,13 +80,14 @@ const BuyPage: React.FC = () => {
                     <PendingInfoSummary orders={pendingBuyOrders} />
                 )
             }
-            <div className="BuyPage-Action">
-                <Button disabled={pendingBuyOrders.length === 0} 
-                    title="Buy" color="info" icon="shopping_cart" 
-                    onClick={() => {}} />
-            </div>
+            <Button 
+                disabled={pendingBuyOrders.length === 0} 
+                title="Buy" color="info" icon="shopping_cart" 
+                onClick={onSubmitBuyOrders} 
+            />
+            
         </>
-    )
+    );
 }
 
 export default BuyPage;

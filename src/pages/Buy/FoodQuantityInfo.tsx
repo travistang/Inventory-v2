@@ -7,6 +7,7 @@ import FoodCard from '../../components/FoodCard';
 import { gql } from "@apollo/client";
 import { useQuery } from "@apollo/react-hooks";
 import { Currency } from '../../data/types';
+import StickyBox from 'react-sticky-box';
 
 const FOOD_INFO_QUERY = gql`
     query FoodInfo($name: String!) {
@@ -27,7 +28,8 @@ type QueryResultType = {
     info: {
         totalAmount: number,
         numberOfContainers: number
-    }
+    },
+    style?: React.CSSProperties
 };
 const FoodInfoSummaryComponent: React.FC<QueryResultType> = (props) => (
     <div className="FoodQuantityInfo-Summary">
@@ -80,6 +82,7 @@ const formLayout: FormLayout = [
         }
     ]
 ];
+
 const computeDisabledFields = (form: FormValueType) => {
     if((form.containerCount as number) <= 1) {
         return ["priceType"];
@@ -113,7 +116,7 @@ type FoodQuantityInfoProps = {
 const FoodQuantityInfoComponent: React.FC<FoodQuantityInfoProps> = ({
     food,
     onPreviousStepRequested,
-    onInfoProvided
+    onInfoProvided,
 }) => {
     const [ form, setFormValue ] = React.useState(initialValue);
 
@@ -144,7 +147,13 @@ const FoodQuantityInfoComponent: React.FC<FoodQuantityInfoProps> = ({
     };
     return (
         <div className="FoodQuantityInfo-Container">
-            { !loading && <FoodInfoSummaryComponent {...data.food as QueryResultType} /> }
+            { !loading && (
+                <StickyBox offsetTop={-16}>
+                    <FoodInfoSummaryComponent 
+                        {...data.food as QueryResultType}
+                    />
+                </StickyBox>
+            )}
             
             <div className="FoodQuantityInfo-Form">
                 <Form withSubmitButton={false} layout={formLayout}

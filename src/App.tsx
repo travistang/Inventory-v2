@@ -6,25 +6,24 @@ import {
 import history from './history';
 import NavBar from './pages/Navbar';
 import  { ToastContainer } from 'react-toastify';
-
+import 'react-toastify/dist/ReactToastify.css';
 // pages
 import FoodPage from './pages/Food';
 import CreateFoodPage from './pages/CreateFood';
 import FoodDetailsPage from './pages/FoodDetails';
-
 import ContainerPage from './pages/Container';
-
+import SettingsPage from './pages/Settings';
 import BuyPage from './pages/Buy';
 
 import store from './reducers';
 import  {Provider} from 'react-redux';
 import Routes from './routes';
-import './App.scss';
-import Buy from './pages/Buy';
 import { HeaderContainer } from './pages/Header';
-import client from './data/graphql';
 
+import client from './data/graphql';
 import { ApolloProvider } from '@apollo/react-hooks';
+
+import './App.scss';
 
 const App: React.FC = () => {
   return (
@@ -40,8 +39,10 @@ const App: React.FC = () => {
                       <Route path={Routes.FOOD_EDIT} component={CreateFoodPage} exact />
                       <Route path={Routes.CONTAINERS_LIST} component={ContainerPage} exact />
                       <Route path={Routes.FOOD_DETAILS} component={FoodDetailsPage} exact />
-
+  
                       <Route path={Routes.BUY_FOOD} component={BuyPage} exact />
+                      
+                      <Route path={Routes.SETTINGS} component={SettingsPage} exact />
 
                       <Route path={Routes.HOME} component={Playground} />
                     </Switch>

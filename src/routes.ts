@@ -7,6 +7,10 @@ const Routes = {
     BUY_FOOD: "/buy",
     CONTAINERS_LIST: "/containers",
     
+    CONSUME_FOOD: "/consume",
+    
+    SETTINGS: "/settings",
+
     HOME: "/"
 }
 

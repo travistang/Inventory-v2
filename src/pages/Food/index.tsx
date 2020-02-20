@@ -28,8 +28,12 @@ const QUERY = gql`
 
 
 const FoodPage: React.FC<FoodPageProps> = () => {
-    const { loading, error, data } = useQuery(QUERY);
+    const { loading, error, data, refetch } = useQuery(QUERY);
 
+    React.useEffect(() => {
+        refetch()
+    }, [window.location.pathname]);
+    
     if (error) {
         alert(error.message);
         return null;
@@ -38,6 +42,7 @@ const FoodPage: React.FC<FoodPageProps> = () => {
         return <div> loading...</div>
     }
 
+    
     const foods = data.foods as Food[];
     return (
         <CenterNoticeSwitch watch={foods}

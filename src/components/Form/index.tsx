@@ -4,6 +4,7 @@ import { useHistory , useLocation } from 'react-router';
 import { History, Location } from 'history';
 import {Icon} from '@material-ui/core';
 import { State } from '../../reducers';
+import Button from '../Button';
 import Input, { InputConfigProps, SelectConfigProps, ValueTypes, InputTypes } from '../Input';
 import './style.scss';
 
@@ -134,12 +135,13 @@ const FormComponent: React.FC<FormProps> = ({
             <div style={{flex: 1}} />
             {
                 withSubmitButton && (
-                    <div onClick={(onSubmit && (isAllFieldsValid || undefined)) && (() => onSubmit(form))}
-                        className={`Form-Submit ${!isAllFieldsValid? "Form-Submit-Invalid" : ""}`}
-                    >
-                        {submitIconName && <Icon>{submitIconName}</Icon>}
-                        {submitButtonText}
-                    </div>
+                    <Button color="info"
+                        title={submitButtonText || "Submit"}
+                        icon={submitIconName}
+                        onClick={onSubmit && (() => onSubmit(form))}
+                        disabled={!isAllFieldsValid}
+                        className="Form-Submit"
+                    />
                 )
             }
         </div>

@@ -6,7 +6,7 @@ import "./style.scss";
 
 const navItems: Array<NavIconProps> = [
     {
-        title: "Containers",
+        title: "Assets",
         icon: "work-outline",
         path: Routes.CONTAINERS_LIST,
     },
@@ -24,6 +24,11 @@ const navItems: Array<NavIconProps> = [
         title: "Buy",
         icon: "shopping-cart",
         path: Routes.BUY_FOOD
+    }, 
+    {
+        title: "Settings",
+        icon: "settings",
+        path: Routes.SETTINGS
     }
 ];
 
@@ -34,8 +39,8 @@ const NavBar: React.FC = () => {
     return (
         <div className="NavBarContainer">
             {
-                navItems.map(props => (
-                    <div onClick={() => history.push(props.path as string)}>
+                navItems.map((props, i) => (
+                    <div key={i} onClick={() => history.push(props.path as string)}>
                         <NavIcon {...props} active={(location.pathname[1] || '/').startsWith(props.path[1] || '/')}  />
                     </div>
                 ))
