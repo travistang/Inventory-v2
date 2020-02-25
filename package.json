@@ -50,7 +50,9 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d build"
   },
   "eslintConfig": {
     "extends": "react-app"
@@ -70,5 +72,6 @@
   "devDependencies": {
     "node-sass": "^4.13.1",
     "sass-loader": "^8.0.0"
-  }
+  },
+  "homepage": "https://travistang.github.io/Inventory-v2"
 }
