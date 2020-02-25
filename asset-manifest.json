@@ -1,0 +1,26 @@
+{
+  "files": {
+    "main.css": "/Inventory-v2/static/css/main.27fb1efc.chunk.css",
+    "main.js": "/Inventory-v2/static/js/main.858620c2.chunk.js",
+    "main.js.map": "/Inventory-v2/static/js/main.858620c2.chunk.js.map",
+    "runtime-main.js": "/Inventory-v2/static/js/runtime-main.a026317a.js",
+    "runtime-main.js.map": "/Inventory-v2/static/js/runtime-main.a026317a.js.map",
+    "static/css/2.a6ab3c2a.chunk.css": "/Inventory-v2/static/css/2.a6ab3c2a.chunk.css",
+    "static/js/2.89488ee4.chunk.js": "/Inventory-v2/static/js/2.89488ee4.chunk.js",
+    "static/js/2.89488ee4.chunk.js.map": "/Inventory-v2/static/js/2.89488ee4.chunk.js.map",
+    "index.html": "/Inventory-v2/index.html",
+    "precache-manifest.835e01d61cf60bf8692f40fed591730e.js": "/Inventory-v2/precache-manifest.835e01d61cf60bf8692f40fed591730e.js",
+    "service-worker.js": "/Inventory-v2/service-worker.js",
+    "static/css/2.a6ab3c2a.chunk.css.map": "/Inventory-v2/static/css/2.a6ab3c2a.chunk.css.map",
+    "static/css/main.27fb1efc.chunk.css.map": "/Inventory-v2/static/css/main.27fb1efc.chunk.css.map",
+    "static/js/2.89488ee4.chunk.js.LICENSE": "/Inventory-v2/static/js/2.89488ee4.chunk.js.LICENSE",
+    "static/media/slick-theme.css": "/Inventory-v2/static/media/slick.f97e3bbf.svg"
+  },
+  "entrypoints": [
+    "static/js/runtime-main.a026317a.js",
+    "static/css/2.a6ab3c2a.chunk.css",
+    "static/js/2.89488ee4.chunk.js",
+    "static/css/main.27fb1efc.chunk.css",
+    "static/js/main.858620c2.chunk.js"
+  ]
+}
