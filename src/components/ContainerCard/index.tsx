@@ -48,16 +48,22 @@ const ContainerCard : React.FC<ContainerCardProps> = ({
             </div>
             <div className="ContainerCard-ContainerRight">
                 <div className="ContainerCard-ContainerRightUp">
-                    {percentageLeft}%
+                    {percentageLeft.toFixed(2)}%
                     <PercentageBar color={color} percentageLeft={percentageLeft} />
                 </div>
                 <div className="ContainerCard-ContainerRightBottom">
                     {
-                        dateOpened ? 
-                            `Opened on ${new Date(dateOpened).toLocaleDateString()}` 
-                            : (<>
-                                    <Icon>check</Icon> Unopened
-                               </>)
+                        dateOpened ? (
+                            <>
+                                <Icon>broken_image</Icon> 
+                                <h6>{new Date(dateOpened).toLocaleDateString()}</h6>
+                            </>
+                        ) : (
+                            <>
+                                <Icon>check</Icon> 
+                                <h6>Unopened</h6>
+                            </>
+                        )
                     }
                     <h6 style={{color}}>
                         { expireDateString() }

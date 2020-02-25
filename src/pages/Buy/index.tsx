@@ -66,31 +66,33 @@ const BuyPage: React.FC = () => {
                     iconName="shopping_cart" 
                     title="Nothing to buy yet"
                     subtitle="Click the '+' button above to add a new item">
-                    {
-                        pendingBuyOrders.map((order, i) => (
-                            <PendingOrderCard order={order} 
-                                actionButton={{
-                                    iconName: 'cancel',
-                                    onClick: () => setPendingBuyOrders(
-                                        // remove this order from the list of pending orders
-                                        pendingBuyOrders.filter((_, j) => i !== j)
-                                    )
-                                }}
-                            />
-                        ))
-                    }
+                    <>
+                        {
+                            pendingBuyOrders.map((order, i) => (
+                                <PendingOrderCard order={order} 
+                                    actionButton={{
+                                        iconName: 'cancel',
+                                        onClick: () => setPendingBuyOrders(
+                                            // remove this order from the list of pending orders
+                                            pendingBuyOrders.filter((_, j) => i !== j)
+                                        )
+                                    }}
+                                />
+                            ))
+                        }
+                        {
+                            !openSelectPopup && (
+                                <PendingInfoSummary orders={pendingBuyOrders} />
+                            )
+                        }
+                        <Button 
+                            disabled={pendingBuyOrders.length === 0} 
+                            title="Buy" color="info" icon="shopping_cart" 
+                            onClick={onSubmitBuyOrders} 
+                        />
+                    </>
                 </CenterNoticeSwitch>
             </div>
-            {
-                !openSelectPopup && (
-                    <PendingInfoSummary orders={pendingBuyOrders} />
-                )
-            }
-            <Button 
-                disabled={pendingBuyOrders.length === 0} 
-                title="Buy" color="info" icon="shopping_cart" 
-                onClick={onSubmitBuyOrders} 
-            />
             
         </>
     );

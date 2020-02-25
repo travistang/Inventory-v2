@@ -7,8 +7,19 @@
     display: flex;
     flex-direction: column;
 }
+
+.ContainerPicker-FoodPreview {
+    padding-top: 8px;
+    background-color: map-get($colors, "primary2");
+}
+
 .ContainerPicker-AmountInputContainer {
     padding-bottom: 64px;
+}
+
+.ContainerPicker-SliderContainer {
+    padding-left: 24px;
+    padding-right: 24px;
 }
 
 .ContainerPicker-ButtonRow {

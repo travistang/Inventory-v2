@@ -52,7 +52,7 @@ const PendingConsumptionCard: React.FC<PendingConsumptionCardProps> = ({
     const AuxComponent = (
         <div className="PendingConsumptionCard-SmallComponent">
             <div>
-                {originalPercentage}% <Icon>arrow_right</Icon> {100 - consumedPercentage}%
+                {originalPercentage}% <Icon>arrow_right</Icon> {originalPercentage - consumedPercentage}%
             </div>
             <PercentageBar 
                 color="orange"
@@ -62,7 +62,7 @@ const PendingConsumptionCard: React.FC<PendingConsumptionCardProps> = ({
             {
                 (originalPercentage - consumedPercentage) < 1 && (
                     <div className="PendingConsumptionCard-DisposeLabel">
-                        Will Dispose
+                        To be disposed
                     </div>
                 )
             }

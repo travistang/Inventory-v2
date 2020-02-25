@@ -10,7 +10,7 @@ export type AuxInfoProps = {
 const AuxInfo: React.FC<AuxInfoProps> = ({title, iconName, value}) => {
     return (
         <div className="AuxInfo">
-            {value}
+            {value ? parseFloat(value.toString()).toFixed(2) : ""}
             <div className="AuxInfo-Title">
                 {title}
             </div>
