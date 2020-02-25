@@ -43,21 +43,15 @@ export class Price {
     }
 }
 
-export interface FoodContainerInfo {
-    expired: boolean
-}
-
 export interface FoodContainer {
     id: string,
-    unit: string,
     capacity: number,
     amount: number,
-    dataPurchased: Date
+    datePurchased: Date
     expiryDate?: Date,
+    dateOpened?: Date,
     price: Price,
-    dateOpened: Date | null,
 
-    info: FoodContainerInfo
 }
 
 export interface FoodInfo {
@@ -77,6 +71,11 @@ export interface BuyOrder {
     expiryDate?: Date,
     amount: number
 };
+
+export interface ConsumeOrder {
+    containerID: string,
+    amount: number
+}
 
 export const typeDefs = `
     enum Currency {
@@ -104,18 +103,26 @@ export const typeDefs = `
 
     type FoodContainer {
         id: ID!
-        unit: String!
         capacity: Number!
         amount: Number!
         datePurchased: Date!
         expiryDate: Date
         dateOpened: Date
         price: Price!
+
+        opened: Boolean!
+        expired: Boolean!
+        percentageLeft: Number!
     }
 
     type FoodInfo {
         numberOfContainers: Number!
+        expiredContainers: Number!
+        openedContainers: Number!
+        
         totalAmount: Number!
+        totalWorth: Number!
+
         percentageLeft: Number!
     }
 
@@ -125,12 +132,16 @@ export const typeDefs = `
         containers: [FoodContainer!]!
         info: FoodInfo
     }
-
     
     type BuyOrder {
         foodName: String!
         price: Price!
         expiryDate: Date
+        amount: Number!
+    }
+
+    type ConsumeOrder {
+        containerID: ID!
         amount: Number!
     }
 
@@ -142,5 +153,6 @@ export const typeDefs = `
     type Mutation {
         addFood(name: String!, unit: Unit!): Food
         buyFood(buyOrders: [BuyOrder]!): [FoodContainer]
+        consumeFoods(consumeOrders: [ConsumeOrder]!): [ID!]
     }
 `;

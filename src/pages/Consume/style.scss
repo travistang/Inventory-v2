@@ -1,0 +1,85 @@
+@import "../../App.scss";
+
+.ContainerPicker-Container {
+    padding-left: 22px;
+    padding-right: 22px;
+
+    display: flex;
+    flex-direction: column;
+}
+.ContainerPicker-AmountInputContainer {
+    padding-bottom: 64px;
+}
+
+.ContainerPicker-ButtonRow {
+    display: flex;
+    // to prevent the buttons to be seen through when the buttons are disabled
+    background-color: map-get($colors, "primary2");
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 99999;
+    div {
+        flex: 1;
+    }
+}
+
+.AmountInput-Container {
+    display: flex;
+    flex-direction: column;
+    overflow-y: scroll;
+}
+
+.AmountInput-Summary {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-end;
+    text-align: right;   
+    align-items: center;
+}
+
+.AmountInput-SummaryText {
+    font-size: 24px;
+    color: map-get($colors, "info");
+    text-align: right;
+    margin-left: 8px;
+}
+
+.PendingConsumption-Container {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.PendingConsumptionCard-SmallComponent {
+    width: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    
+    align-items: center;
+
+    > * {
+        margin: 4px;
+    }
+    // percentage change div
+    :nth-child(1) {
+        display: flex;
+        align-items: center;
+    }
+
+    // the progress bar
+    :nth-child(2) {
+        min-width: 75%;
+    }
+}
+
+.PendingConsumptionCard-DisposeLabel {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: map-get($colors, "info");
+    color: map-get($colors, "primary2");
+    padding-left: 4px;
+    padding-right: 4px;
+}

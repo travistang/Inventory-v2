@@ -1,5 +1,11 @@
 @import "../../App.scss";
 
+.FoodDetails-Container {
+    overflow-y: scroll;
+    display: flex;
+    flex-direction: column;
+}
+
 .FoodDetails-TopSection {
     // flex: 1;
     display: flex;
@@ -23,8 +29,9 @@
     margin-top: 16px;   
     margin-bottom: 16px;   
 }
-.FoodDetails-TopSection-TrendContainer > * > .AuxInfo,
-.FoodDetails-TopSection-TrendContainer > * > .AuxInfo > * {
+
+.AuxInfo,
+.AuxInfo > * {
     color: map-get($colors, "info");
 }
 
@@ -39,6 +46,11 @@
     justify-content: space-between;
     
 }
+.FoodDetails-TopSection-ListInfoRow {
+    display: flex;
+    flex-direction: column;
+}
+
 .FoodDetails-TopSection-AuxInfoRow > .AuxInfo {
     padding: 16px;
 }
@@ -66,4 +78,27 @@
     font-size: 10px;
     text-align: center;
     flex: 1;
+}
+
+.ListInfoItem-Container {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    padding-top: 16px;
+    padding-bottom: 8px;
+}
+
+.ListInfoItem-Left {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.ListInfoItem-Right,
+.ListInfoItem-Right > * {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    text-align: right;
+    padding-left: 8px;
 }

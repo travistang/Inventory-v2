@@ -2,7 +2,7 @@ import React from 'react';
 import Form, { FormLayout, FormValueType } from '../../components/Form';
 
 import Button from '../../components/Button';
-import { BuyOrder, RawCurrency } from '../../data/typedefs';
+import { BuyOrder, RawCurrency, FoodContainer } from '../../data/typedefs';
 import FoodCard from '../../components/FoodCard';
 import { gql } from "@apollo/client";
 import { useQuery } from "@apollo/react-hooks";
@@ -14,6 +14,10 @@ const FOOD_INFO_QUERY = gql`
         food(name: $name) @client {
             name
             unit
+            containers {
+                expiryDate
+                dateOpened
+            }
             info {
                 totalAmount
                 numberOfContainers
@@ -25,6 +29,7 @@ const FOOD_INFO_QUERY = gql`
 type QueryResultType = {
     name: string,
     unit: string,
+    containers: FoodContainer[],
     info: {
         totalAmount: number,
         numberOfContainers: number

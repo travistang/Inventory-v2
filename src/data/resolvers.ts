@@ -1,9 +1,11 @@
 import { 
     Food, FoodContainer, 
-    Unit, 
-    BuyOrder 
+    Unit, Price,
+    BuyOrder,
+    ConsumeOrder 
 } from './typedefs';
 import md5 from 'blueimp-md5';
+import { convertToFloat } from '../utils';
 
 export const localStorageKey = 'db';
 
@@ -42,6 +44,21 @@ const resolvers = {
             return db.foods;
         },
     },
+    FoodContainer: {
+        datePurchased: (container: FoodContainer) => {
+            return new Date(container.datePurchased);
+        },
+        opened: (container: FoodContainer) => {
+           return !!container.dateOpened;
+        },
+        expired: (container: FoodContainer) => {
+            return (!!container.expiryDate) && 
+                (new Date(container.expiryDate).getDate() < new Date().getDate());
+        },
+        percentageLeft: (container: FoodContainer) => {
+            return container.amount / container.capacity * 100;
+        }
+    },
     Food: {
         info: (food: Food) => {
             const totalAmount = food.containers.reduce(
@@ -51,13 +68,32 @@ const resolvers = {
                 (sum, container) => sum + container.capacity, 0
             );
             
+            const expiredContainers = food.containers.filter(
+                container => container.expiryDate && new Date(container.expiryDate).getDate() < (new Date()).getDate()
+            ).length;
+
+            const openedContainers = food.containers.filter(
+                container => !!container.dateOpened
+            ).length;
+
+            const totalWorth = food.containers.reduce(
+                (sum, { price }) => sum + new Price(price.amount, price.currency).as("EUR").amount, 
+                0);
             const numberOfContainers = food.containers.length;
+
+            const percentageLeft = (totalCapacity === 0) ? 
+                0 : 
+                totalAmount / totalCapacity * 100;
+            
             return {
                 __typename: "FoodInfo",
-                totalAmount,
                 numberOfContainers,
-                percentageLeft: (totalCapacity === 0) ? 0 : totalAmount / totalCapacity
-            }
+                expiredContainers,
+                openedContainers,
+                totalAmount,
+                totalWorth,
+                percentageLeft,
+            };
         }
     },
     Mutation: {
@@ -80,16 +116,17 @@ const resolvers = {
                 
                 // locate the food this order is referring to
                 const foodId = db.foods.findIndex(food => food.name === name);
+                
                 // add food to the db if it is found
-                if (foodId > 0) {
+                if (foodId > -1) {
                     //@ts-ignore
                     const container = {
                         __typename: "FoodContainer",
                         id: md5((new Date()).toString() + name + amount),
-                        capacity: amount,
-                        amount: Number.parseFloat(amount.toString()),
-                        dataPurchased: new Date(),
-                        expiryDate, 
+                        capacity: convertToFloat(amount),
+                        amount: convertToFloat(amount),
+                        datePurchased: new Date(),
+                        expiryDate: expiryDate ? new Date(expiryDate) : null, 
                         dateOpened: null,
                         price
                     } as FoodContainer;
@@ -101,6 +138,53 @@ const resolvers = {
 
             saveDatabase(db);
             return newFoodContainers;
+        },
+        consumeFoods: (_: any, { consumeOrders }: {consumeOrders: ConsumeOrder[]}) => {
+            const db = loadDatabase();
+            let hasError = false;
+            consumeOrders.forEach(order => {
+                const { containerID, amount } = order;
+                const foodId = db.foods.findIndex(
+                    food => food.containers.find(con => con.id === containerID)
+                );
+
+                if (foodId < 0) {
+                    console.log("food id < 0");
+                    hasError = true;
+                    return;
+                };
+                const containerIndex = db.foods[foodId]
+                    .containers
+                    .findIndex(con => con.id === containerID);
+                
+                // check if container is okay to deduct
+                const container = db.foods[foodId].containers[containerIndex] as FoodContainer;
+                if (container.amount < amount) {
+                    console.log('amount isnt right');
+                    hasError = true;
+                    return;
+                }
+
+                // apply the deduction
+                db.foods[foodId].containers[containerIndex].amount -= amount;
+                if (!db.foods[foodId].containers[containerIndex].dateOpened) {
+                    db.foods[foodId].containers[containerIndex].dateOpened = new Date();
+                }
+
+                // check if the container needs to be disposed
+                // you dispose a container if it is empty, or it has really really few food left.
+                const {amount: remainingAmount, capacity} = db.foods[foodId].containers[containerIndex];
+                if (remainingAmount / capacity < 0.01) {
+                    db.foods[foodId].containers = db.foods[foodId].containers.filter((_, i) => i !== containerIndex);
+                }
+            });
+
+            if (!hasError) {
+                saveDatabase(db);
+            }
+            return hasError ? 
+                consumeOrders.map(({containerID}) => containerID) 
+                : null;
         }
     }
 }

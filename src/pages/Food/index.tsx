@@ -18,9 +18,13 @@ const QUERY = gql`
         foods @client {
             name
             unit
+            containers {
+                expiryDate
+                dateOpened
+            }
             info {
-                totalAmount
                 numberOfContainers
+                totalAmount
             }
         }
     }
@@ -33,7 +37,7 @@ const FoodPage: React.FC<FoodPageProps> = () => {
     React.useEffect(() => {
         refetch()
     }, [window.location.pathname]);
-    
+
     if (error) {
         alert(error.message);
         return null;
@@ -44,6 +48,7 @@ const FoodPage: React.FC<FoodPageProps> = () => {
 
     
     const foods = data.foods as Food[];
+
     return (
         <CenterNoticeSwitch watch={foods}
             iconName="fastfood"
@@ -61,7 +66,14 @@ const FoodPage: React.FC<FoodPageProps> = () => {
                     placeholder: "Search for food..."
                 }}
                 minimumSearchLength={2}
-                renderItem={food => <FoodCard {...food} onClick={() => history.push(Routes.FOOD_DETAILS)}/>}
+                renderItem={food => (
+                    <FoodCard {...food} 
+                        onClick={() => history.push({
+                            pathname: Routes.FOOD_DETAILS,
+                            search: `?food=${food.name}`
+                        })}
+                    />
+                )}
             >
 
             </SearchList>

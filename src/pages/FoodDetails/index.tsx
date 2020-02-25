@@ -1,92 +1,156 @@
 import React from 'react';
-import Trend from 'react-trend';
 import AuxInfo, { AuxInfoProps } from './auxInfo';
-import { Food } from '../../data/types';
-import TrendLine from '../../components/TrendLine';
+import ListInfoItem, { ListInfoItemProps} from './listInfoItem';
+import { Price } from '../../data/types';
 import { useHeader } from '../Header';
 import Routes from '../../routes';
 import { useLocation, useHistory } from "react-router-dom";
 import { CenterNoticeSwitch } from '../../components/CenterNotice';
+import ContainerCard from '../../components/ContainerCard';
+
+import { gql } from '@apollo/client';
+import { useQuery } from '@apollo/react-hooks';
 
 import "./style.scss";
 
-type FoodDetailsProps = {
-    food: Food
+const FOOD_DETAIL_QUERY = gql`
+    query foodDetails($food: String!) {
+        food(name: $food) @client {
+            name
+            unit
+            containers {
+                capacity
+                amount
+                datePurchased
+                expiryDate
+                dateOpened
+                price
+
+                expired
+                opened
+                percentageLeft
+            }
+            info {
+                numberOfContainers
+                expiredContainers
+                openedContainers
+                totalAmount
+                totalWorth
+                percentageLeft
+            }
+        }
+    }
+`;
+type QueryResultType = {
+    name: string,
+    unit: string,
+    containers: [{
+        capacity: number,
+        amount: number,
+        datePurchased: Date,
+        expiryDate?: Date,
+        dateOpened?: Date,
+        price: Price,
+
+        expired: boolean,
+        opened: boolean,
+        percentageLeft: number
+    }],
+    info: {
+        numberOfContainers: number,
+        expiredContainers: number,
+        openedContainers: number,
+        totalAmount: number,
+        totalWorth: number,
+        percentageLeft: number
+    }
 }
- 
-const FoodDetailsPage: React.FC<FoodDetailsProps> = () => {
+const FoodDetailsPage: React.FC = () => {
     const history  = useHistory();
     const location = useLocation();
     const { navOptions, setNavOptions } = useHeader();
 
+    const foodName = new URLSearchParams(location.search).get('food');
+    const { loading, error, data } = useQuery(FOOD_DETAIL_QUERY, {
+        variables: {
+            food: foodName
+        }
+    });
+
+    if(!foodName) history.goBack();
+
     React.useEffect(() => {
         setNavOptions({
-            ...navOptions, 
+            ...navOptions,
+            title: foodName as string,
+            withBackButton: true,
             navButtons: [{ 
                 iconName: "edit", 
-                onClick: () => history.push(
-                    Routes.FOOD_EDIT, { 
-                        food: {
-                            ...food,
-                            dateToUseAfterOpen: food.latestOpenDays()
-                        }
+                onClick: () => history.push({
+                    pathname: Routes.FOOD_EDIT,
+                    search: `?food=${foodName}`
                 })
             }]
         });
     }, []);
 
-    const food = location.state && (location.state.food as Food);
-    if (!food || !food.totalWorth) {
-        history.push(Routes.CONTAINERS_LIST);
+    if (loading) {
         return null;
     }
-    
+
+    if (error) {
+        alert(error.message);
+        return null;
+    }
+
+    const food = data.food as QueryResultType;
     // things to render under the main trendbar
-    const auxConfigs: Array<AuxInfoProps> = [
+    const auxConfigs: AuxInfoProps[] = [
         {
-            title: 'Containers',
+            title: 'Total Amount',
             iconName: 'kitchen',
-            value: food.containers.length
-        },
-        {
-            title: 'Days to open',
-            iconName: 'calendar',
-            value: (() => {
-                const days = food.latestOpenDays();
-                return days || '--';
-            })()
+            value: `${food.info.totalAmount} ${food.unit}`
         },
         {
             title: 'Worth',
             iconName: 'money',
-            value: `${food.totalWorth("EUR").amount}€`
+            value: `${food.info.totalWorth}€`
+        },
+        {
+            title: "Percentage Left",
+            iconName: "percentage",
+            value: `${food.info.percentageLeft}%`
         }
     ];
+
+    const listInfoConfigs: ListInfoItemProps[] = [
+        {
+            color: 'white',
+            iconName: "kitchen",
+            description: "Unopened Containers",
+            value: (food.info.numberOfContainers - food.info.openedContainers).toString()
+        },
+        {
+            color: 'orange',
+            iconName:"kitchen",
+            description: "Opened Containers",
+            value: (food.info.openedContainers).toString()
+        },
+        {
+            color: 'red',
+            iconName:"delete_forever",
+            description: "Expired Containers",
+            value: (food.info.expiredContainers).toString()
+        }
+    ];
+
     return (
-        <>
+        <div className="FoodDetails-Container">
             {/*
                 Top section
             */}
-
              <div className="FoodDetails-TopSection">
-                 <div className="FoodDetails-TopSection-Title">
-                    { food.name }
-                 </div>
-                 <div className="FoodDetails-TopSection-TrendContainer">
-                    <TrendLine
-                        data={food.getTotalAmountHistory()}
-                    />
-                    <div>
-                        <AuxInfo 
-                            title="Amount" iconName="fitness_center" 
-                            value={`${food.totalAmount()} ${food.unit}`}
-                        />
-                        <AuxInfo
-                            title="Remaining" 
-                            value={`${food.remainingFoodPercentage().toFixed(2)} %`}
-                        />
-                    </div>
-                 </div>
+                 <h6>Summary</h6>
                  <div className="FoodDetails-TopSection-AuxInfoRow">
                      {
                          auxConfigs.map(config => (
@@ -94,7 +158,19 @@ const FoodDetailsPage: React.FC<FoodDetailsProps> = () => {
                          ))
                      }
                  </div>
+                 {
+                     food.info.numberOfContainers > 0 && (
+                        <div className="FoodDetails-TopSection-LIstInfoRow">
+                            {
+                                listInfoConfigs.map((config, i) => (
+                                    <ListInfoItem {...config} key={i} />
+                                ))
+                            }
+                        </div>
+                     )
+                 }
              </div>
+
              <div className="FoodDetails-BottomSection">
                 <CenterNoticeSwitch 
                     watch={food.containers}
@@ -102,12 +178,17 @@ const FoodDetailsPage: React.FC<FoodDetailsProps> = () => {
                     title="No Containers"
                     subtitle="Use the buy food function to add containers of this food"
                 >
-                    {
-                        food.containers.map(({capacity}) => <div>{capacity}</div>)
-                    }
+                    <>
+                        <h6>{food.info.numberOfContainers} Container(s) </h6>
+                        {
+                            food.containers.map(
+                                (container) => <ContainerCard container={container} unit={food.unit} />
+                            )
+                        }
+                    </>
                 </CenterNoticeSwitch>
              </div>
-        </>
+        </div>
     )
 }
 

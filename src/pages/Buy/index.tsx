@@ -7,10 +7,11 @@ import { CenterNoticeSwitch } from '../../components/CenterNotice';
 import PendingOrderCard from './PendingOrderCard';
 import PendingInfoSummary from './PendingInfoSummary';
 import { useHeader } from '../Header';
-import "./style.scss";
 
 import { gql } from '@apollo/client';
 import { useMutation } from '@apollo/react-hooks';
+import { toast } from 'react-toastify';
+import "./style.scss";
 
 const ADD_ORDERS = gql`
     mutation buyFoods($orders: [BuyOrder]!) {
@@ -41,11 +42,16 @@ const BuyPage: React.FC = () => {
 
     // handler of the final buy button
     const onSubmitBuyOrders = () => {
-        const containerIds = buyFoodFunc({
+        buyFoodFunc({
             variables: { orders: pendingBuyOrders}
         });
-        console.log('buy results');
-        console.log(containerIds);
+        toast.success("Items bought", {
+            autoClose: 3000,
+            onClose: () => {
+                setOpenSelectPopup(false);
+                setPendingBuyOrders([]);
+            }
+        });
     };
 
     return (

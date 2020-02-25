@@ -1,6 +1,6 @@
 import React from "react";
 import NavIcon, { NavIconProps } from "./NavIcon";
-import { useLocation, useHistory, RouteComponentProps } from "react-router-dom";
+import { useLocation, useHistory } from "react-router-dom";
 import Routes from '../../routes';
 import "./style.scss";
 
@@ -11,9 +11,9 @@ const navItems: Array<NavIconProps> = [
         path: Routes.CONTAINERS_LIST,
     },
     {
-        title: "Home",
-        icon: "home",
-        path: Routes.HOME
+        title: "Consume",
+        icon: "whatshot",
+        path: Routes.CONSUME
     },
     {
         title: "Food",
@@ -41,7 +41,11 @@ const NavBar: React.FC = () => {
             {
                 navItems.map((props, i) => (
                     <div key={i} onClick={() => history.push(props.path as string)}>
-                        <NavIcon {...props} active={(location.pathname[1] || '/').startsWith(props.path[1] || '/')}  />
+                        <NavIcon {...props} active={
+                                (location.pathname.split('/')[1] || '/')
+                                .startsWith(props.path.split('/')[1] || '/')
+                            }  
+                        />
                     </div>
                 ))
             }

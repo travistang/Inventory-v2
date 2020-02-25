@@ -25,9 +25,7 @@
 }
 
 .NavIcon-Container {
-    flex-shrink: 0;
-    flex-grow: 1;
-    flex-basis: 0;
+    flex: 1;
     display: flex;
     justify-content: center;
     align-items: center;

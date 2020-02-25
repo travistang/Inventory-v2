@@ -14,6 +14,7 @@ import FoodDetailsPage from './pages/FoodDetails';
 import ContainerPage from './pages/Container';
 import SettingsPage from './pages/Settings';
 import BuyPage from './pages/Buy';
+import ConsumePage from './pages/Consume';
 
 import store from './reducers';
 import  {Provider} from 'react-redux';
@@ -41,10 +42,11 @@ const App: React.FC = () => {
                       <Route path={Routes.FOOD_DETAILS} component={FoodDetailsPage} exact />
   
                       <Route path={Routes.BUY_FOOD} component={BuyPage} exact />
+                      <Route path={Routes.CONSUME} component={ConsumePage} exact />
                       
                       <Route path={Routes.SETTINGS} component={SettingsPage} exact />
 
-                      <Route path={Routes.HOME} component={Playground} />
+                      <Route path={Routes.HOME} component={FoodPage} />
                     </Switch>
                   </div>
                 </HeaderContainer>

@@ -1,5 +1,7 @@
 import React from 'react'
 import { range } from 'lodash';
+import "./style.scss";
+
 type StepIndicatorProps = {
     step: number,
     totalSteps: number

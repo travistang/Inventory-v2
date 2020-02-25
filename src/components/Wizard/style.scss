@@ -1,0 +1,92 @@
+@import "../../App.scss";
+
+.StepIndicator-Container {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    margin-left: 22px;
+    margin-right: 22px;
+    padding-bottom: 16px;
+    z-index: 99999;
+};
+
+.StepIndicator-StepComponent, .StepIndicator-StepComponent > .StepIndicator-Line {
+    flex: 1;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+$passedColor: map-get($colors, "info");
+$pendingColor: map-get($colors, "text");
+
+.StepIndicator-Line {
+    height: 4px;
+    width: 100%;
+}
+
+.StepIndicator-StepComponent-passed > .StepIndicator-Line,
+.StepIndicator-StepComponent-ongoing > .StepIndicator-Line:nth-child(1) {
+    background-color: $passedColor;
+}
+
+.StepIndicator-StepComponent-pending > .StepIndicator-Line,
+.StepIndicator-StepComponent-ongoing > .StepIndicator-Line {
+    background-color: $pendingColor;
+}
+
+.StepIndicator-Center {
+    height: 24px;
+    width: 24px;
+    // background-color: orange;
+    border-radius: 72px;
+    border-width: thick;
+    margin-left: 4px;
+    margin-right: 4px;
+
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+}
+
+
+.StepIndicator-StepComponent-passed > .StepIndicator-Center {
+    background-color: $passedColor;
+    color: white;
+}
+
+.StepIndicator-StepComponent-ongoing > .StepIndicator-Center {
+    border: 2px solid $passedColor;
+    color: $passedColor;
+}
+
+.StepIndicator-StepComponent-pending > .StepIndicator-Center {
+    border: 2px solid $pendingColor;
+}
+
+.FoodTypePicker-Container {
+    display: flex;
+    flex-direction: column;
+    overflow-y: scroll;
+}
+
+.Wizard-Container {
+    display: flex;
+    flex-direction: column;
+    position: fixed;
+    z-index: 999;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+
+    background-color: map-get($colors, "primary2");
+}
+.Wizard-Content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    overflow-y: scroll;
+}
+

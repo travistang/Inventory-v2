@@ -2,12 +2,13 @@ import React from 'react';
 import { Icon } from '@material-ui/core';
 import { withRouter, RouteComponentProps } from 'react-router';
 import GenericCard, { GenericCardExtraProps } from '../GenericCard';
-
-import { range } from 'lodash';
+import ContainerOverview from './ContainerOverview';
+import { FoodContainer } from '../../data/typedefs';
 
 type FoodCardProps = GenericCardExtraProps & {
     name: string,
     unit: string,
+    containers: FoodContainer[],
     info: {
         totalAmount: number,
         numberOfContainers: number
@@ -25,12 +26,12 @@ const SmallInfo = ({
 );
 
 const FoodCard: React.FC<FoodCardProps & RouteComponentProps<any>> = ({
-    name, unit, info, onClick, ...props
+    name, unit, info, onClick, containers, ...props
 }) => {
     const rightComponent = <SmallInfo value={`${info.totalAmount} ${unit}`} style={{fontSize: 18}} />;
-    const smallComponent = info.numberOfContainers ? (range(info.numberOfContainers).map(
-        () => <Icon>kitchen</Icon>
-    )) : "No containers left";
+    const smallComponent = !info.numberOfContainers ?
+         "No containers" :
+         <ContainerOverview containers={containers} />;
 
     return (
         <GenericCard 
@@ -40,7 +41,7 @@ const FoodCard: React.FC<FoodCardProps & RouteComponentProps<any>> = ({
             onClick={onClick} 
             {...props}
         />
-    )
+    );
 }
 
 export default withRouter(FoodCard);
