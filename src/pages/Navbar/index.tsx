@@ -42,8 +42,8 @@ const NavBar: React.FC = () => {
                 navItems.map((props, i) => (
                     <div key={i} onClick={() => history.push(props.path as string)}>
                         <NavIcon {...props} active={
-                                (location.pathname.split('/')[1] || '/')
-                                .startsWith(props.path.split('/')[1] || '/')
+                                (location.pathname.split('/app')[1] || '/app')
+                                .startsWith(props.path.split('/app')[1] || '/app')
                             }  
                         />
                     </div>

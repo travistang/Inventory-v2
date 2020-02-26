@@ -1,16 +1,16 @@
 const Routes = {
-    FOOD_LIST: "/food",
-    FOOD_ADD: "/food/new",
-    FOOD_DETAILS: "/food/details",
-    FOOD_EDIT: "/food/edit",
+    FOOD_LIST: "/app/food",
+    FOOD_ADD: "/app/food/new",
+    FOOD_DETAILS: "/app/food/details",
+    FOOD_EDIT: "/app/food/edit",
 
-    BUY_FOOD: "/buy",
-    CONTAINERS_LIST: "/containers",
+    BUY_FOOD: "/app/buy",
+    CONTAINERS_LIST: "/app/containers",
 
-    SETTINGS: "/settings",
+    SETTINGS: "/app/settings",
 
-    CONSUME: "/consume",
-    HOME: "/"
+    CONSUME: "/app/consume",
+    HOME: "/app/"
 }
 
 export default Routes
