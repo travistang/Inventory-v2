@@ -1,7 +1,7 @@
 import React from 'react';
 import Playground from './components/playground';
 import {
-  Router, Switch, Route, Redirect, useLocation
+  HashRouter, Switch, Route, Redirect, useLocation, BrowserRouter
 } from 'react-router-dom';
 import history from './history';
 import NavBar from './pages/Navbar';
@@ -55,7 +55,7 @@ const App: React.FC = () => {
     <div className="App">
       <ApolloProvider client={client}>
         <Provider store={store}>
-            <Router history={history}>
+            <BrowserRouter basename="/Inventory-v2">
                 <HeaderContainer>
                   <div className="Page">
                     <Switch>
@@ -81,7 +81,7 @@ const App: React.FC = () => {
                 </HeaderContainer>
                 <ToastContainer />
                 <NavBar />
-            </Router>
+            </BrowserRouter>
         </Provider>
       </ApolloProvider>
     </div>
