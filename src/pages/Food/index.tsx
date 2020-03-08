@@ -1,6 +1,7 @@
 import React from 'react';
 import FoodCard from '../../components/FoodCard';
 import { withHeader } from '../Header';
+import { useLocation } from 'react-router-dom';
 import history from '../../history';
 import { Food } from '../../data/typedefs';
 import SearchList from '../../components/SearchList';
@@ -33,6 +34,8 @@ const QUERY = gql`
 
 const FoodPage: React.FC<FoodPageProps> = () => {
     const { loading, error, data, refetch } = useQuery(QUERY);
+    // the current query, mostly is ?page=...
+    const currentQuery = useLocation().search;
 
     React.useEffect(() => {
         refetch()
@@ -48,6 +51,7 @@ const FoodPage: React.FC<FoodPageProps> = () => {
 
     
     const foods = data.foods as Food[];
+
 
     return (
         <CenterNoticeSwitch watch={foods}
@@ -68,10 +72,7 @@ const FoodPage: React.FC<FoodPageProps> = () => {
                 minimumSearchLength={2}
                 renderItem={food => (
                     <FoodCard {...food} 
-                        onClick={() => history.push({
-                            pathname: Routes.FOOD_DETAILS,
-                            search: `?food=${food.name}`
-                        })}
+                        onClick={() => history.push(Routes.FOOD_DETAILS + `&food=${food.name}`)}
                     />
                 )}
             >
