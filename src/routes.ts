@@ -1,3 +1,5 @@
+export const BaseName = "/Inventory-v2";
+
 export const PageNames = {
     FOOD_LIST: "food",
     FOOD_ADD: "food_new",

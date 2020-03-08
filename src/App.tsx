@@ -18,7 +18,7 @@ import ConsumePage from './pages/Consume';
 
 import store from './reducers';
 import  {Provider} from 'react-redux';
-import Routes, { PageNames } from './routes';
+import Routes, { PageNames, BaseName } from './routes';
 import { HeaderContainer } from './pages/Header';
 
 import client from './data/graphql';
@@ -29,7 +29,8 @@ import './App.scss';
 
 const RouteSwitch: React.FC = () => {
   const query = new URLSearchParams(useLocation().search);
-  console.log(query.get('page'));
+  console.log('query');
+  console.log(query)
   switch(query.get('page')) {
     case PageNames.FOOD_LIST:
       return <FoodPage />
@@ -55,27 +56,11 @@ const App: React.FC = () => {
     <div className="App">
       <ApolloProvider client={client}>
         <Provider store={store}>
-            <BrowserRouter basename="/Inventory-v2">
+            <BrowserRouter basename={BaseName}>
                 <HeaderContainer>
                   <div className="Page">
                     <Switch>
                       <Route path={Routes.HOME} component={RouteSwitch} />
-                      {
-                        /*
-                          <Route path={Routes.FOOD_LIST} component={FoodPage} />
-                          <Route path={Routes.FOOD_ADD} component={CreateFoodPage} />
-                          <Route path={Routes.FOOD_EDIT} component={CreateFoodPage} exact />
-                          <Route path={Routes.CONTAINERS_LIST} component={ContainerPage} exact />
-                          <Route path={Routes.FOOD_DETAILS} component={FoodDetailsPage} exact />
-      
-                          <Route path={Routes.BUY_FOOD} component={BuyPage} exact />
-                          <Route path={Routes.CONSUME} component={ConsumePage} exact />
-                          
-                          <Route path={Routes.SETTINGS} component={SettingsPage} exact />
-    
-                          // <Route path={Routes.HOME} component={() => <Redirect to={Routes.FOOD_LIST} />} />
-                        */
-                      }
                     </Switch>
                   </div>
                 </HeaderContainer>
