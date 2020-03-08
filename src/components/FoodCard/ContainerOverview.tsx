@@ -37,7 +37,7 @@ const ContainerOverview: React.FC<ContainerOverviewProps> = ({
     }, i) => {
 
         let status = Object.keys(STATUS_COLOR)[0] as StatusTypes;
-        const expired = !!expiryDate && new Date(expiryDate).getDate() > now;
+        const expired = !!expiryDate && new Date(expiryDate).getDate() < now;
         const opened  = !!dateOpened;
 
         if (expired) {

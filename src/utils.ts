@@ -12,6 +12,6 @@ export const convertToFloat = (value: string | number) => {
 
 export const getDifferenceInDaysFromNow = (date: Date) => {
     return Math.ceil(Math.abs(
-            (new Date().getDate() - new Date(date).getDate()) / (1000 * 3600 * 24)
+            (new Date().getTime() - new Date(date).getTime()) / (1000 * 3600 * 24)
         ));
 }
