@@ -1,7 +1,7 @@
 import React from 'react';
 import Playground from './components/playground';
 import {
-  HashRouter, Switch, Route, Redirect, useLocation, BrowserRouter
+  Router, Switch, Route, useLocation, BrowserRouter
 } from 'react-router-dom';
 import history from './history';
 import NavBar from './pages/Navbar';
@@ -29,12 +29,18 @@ import './App.scss';
 
 const RouteSwitch: React.FC = () => {
   const query = new URLSearchParams(useLocation().search);
+  // const query = new URLSearchParams(search);
+  // const [pageName, setPageName] = React.useState("");
+
+  // React.useEffect(() => {
+  //   setPageName(new URLSearchParams(search || "").get('page') || "");
+  // }, [search]);
   console.log('query');
-  console.log(query)
+  console.log(query);
+  console.log(useLocation().search);
   switch(query.get('page')) {
     case PageNames.FOOD_LIST:
       return <FoodPage />
-    case PageNames.FOOD_EDIT:
     case PageNames.FOOD_ADD:
       return <CreateFoodPage />
     case PageNames.CONTAINERS_LIST:
@@ -56,7 +62,7 @@ const App: React.FC = () => {
     <div className="App">
       <ApolloProvider client={client}>
         <Provider store={store}>
-            <BrowserRouter basename={BaseName}>
+            <Router  history={history}>
                 <HeaderContainer>
                   <div className="Page">
                     <Switch>
@@ -66,7 +72,7 @@ const App: React.FC = () => {
                 </HeaderContainer>
                 <ToastContainer />
                 <NavBar />
-            </BrowserRouter>
+            </Router>
         </Provider>
       </ApolloProvider>
     </div>

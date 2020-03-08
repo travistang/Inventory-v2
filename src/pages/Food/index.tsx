@@ -72,7 +72,9 @@ const FoodPage: React.FC<FoodPageProps> = () => {
                 minimumSearchLength={2}
                 renderItem={food => (
                     <FoodCard {...food} 
-                        onClick={() => history.push(Routes.FOOD_DETAILS + `&food=${food.name}`)}
+                        onClick={() => history.replace(
+                            Routes.FOOD_DETAILS + `&food=${food.name}`
+                        )}
                     />
                 )}
             >
