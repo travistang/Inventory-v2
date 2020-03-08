@@ -24,7 +24,7 @@ const ADD_ORDERS = gql`
 const BuyPage: React.FC = () => {
     const [ openSelectPopup, setOpenSelectPopup] = React.useState(false);
     const [ pendingBuyOrders, setPendingBuyOrders ] = React.useState([] as BuyOrder[]);
-    
+    const [ hasJustBought, setHasJustBought] = React.useState(false);
     const { setNavOptions } = useHeader();
     React.useEffect(() => {
         setNavOptions({
@@ -46,10 +46,14 @@ const BuyPage: React.FC = () => {
             variables: { orders: pendingBuyOrders}
         });
         toast.success("Items bought", {
-            autoClose: 3000,
+            autoClose: 1000,
+            onOpen: () => {
+                setHasJustBought(true);
+            },
             onClose: () => {
                 setOpenSelectPopup(false);
                 setPendingBuyOrders([]);
+                setHasJustBought(false);
             }
         });
     };
@@ -86,7 +90,7 @@ const BuyPage: React.FC = () => {
                             )
                         }
                         <Button 
-                            disabled={pendingBuyOrders.length === 0} 
+                            disabled={pendingBuyOrders.length === 0 || hasJustBought} 
                             title="Buy" color="info" icon="shopping_cart" 
                             onClick={onSubmitBuyOrders} 
                         />

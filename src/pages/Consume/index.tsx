@@ -25,6 +25,8 @@ const ConsumePage: React.FC = () => {
         setPendingConsumeOrders 
     ] = React.useState([] as PendingConsumeOrder[]);
 
+    const [hasJustConsumed, setHasJustConsumed] = React.useState(false);
+
     const { setNavOptions } = useHeader();
 
     React.useEffect(() => {
@@ -79,14 +81,18 @@ const ConsumePage: React.FC = () => {
                                 }
                             });
                             toast.success("Records saved...", {
-                                autoClose: 3000,
+                                autoClose: 1000,
+                                onOpen: () => {
+                                    setHasJustConsumed(true);
+                                },
                                 onClose: () => {
                                     // reset the form
                                     setPendingConsumeOrders([]);
+                                    setHasJustConsumed(false);
                                 }
                             });
                         }}
-                        disabled={pendingConsumeOrders.length === 0}
+                        disabled={pendingConsumeOrders.length === 0 || hasJustConsumed}
                         title="Consume" icon="whatshot" 
                     />
                 </>
