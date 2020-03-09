@@ -65,14 +65,11 @@ const CreateFoodPage: React.FC = () => {
             }
         })
         
-        toast("Food Added.", {
+        toast.success("Food Added.", {
             position: toast.POSITION.TOP_CENTER,
-            autoClose: 3000,
+            autoClose: 1000,
             onClose: () => history.goBack()
         });
-        // setTimeout(() => {
-        //     history.push(Routes.FOOD_LIST);
-        // }, 2000);
     }
 
     return (

@@ -10,6 +10,7 @@ import ContainerCard from '../../components/ContainerCard';
 
 import { gql } from '@apollo/client';
 import { useQuery } from '@apollo/react-hooks';
+import { roundNumber } from '../../utils';
 
 import "./style.scss";
 
@@ -109,17 +110,17 @@ const FoodDetailsPage: React.FC = () => {
         {
             title: 'Total Amount',
             iconName: 'kitchen',
-            value: `${food.info.totalAmount} ${food.unit}`
+            value: `${roundNumber(food.info.totalAmount)} ${food.unit}`
         },
         {
             title: 'Worth',
             iconName: 'money',
-            value: `${food.info.totalWorth}€`
+            value: `${roundNumber(food.info.totalWorth)} €`
         },
         {
             title: "Percentage Left",
             iconName: "percentage",
-            value: `${food.info.percentageLeft}%`
+            value: `${roundNumber(food.info.percentageLeft)} %`
         }
     ];
 
