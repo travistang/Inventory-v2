@@ -5,7 +5,7 @@ import {
     ConsumeOrder 
 } from './typedefs';
 import md5 from 'blueimp-md5';
-import { convertToFloat } from '../utils';
+import { convertToFloat, randomString, roundNumber } from '../utils';
 
 export const localStorageKey = 'db';
 
@@ -122,13 +122,13 @@ const resolvers = {
                     //@ts-ignore
                     const container = {
                         __typename: "FoodContainer",
-                        id: md5((new Date()).toString() + name + amount),
+                        id: randomString(24),
                         capacity: convertToFloat(amount),
                         amount: convertToFloat(amount),
                         datePurchased: new Date(),
                         expiryDate: expiryDate ? new Date(expiryDate) : null, 
                         dateOpened: null,
-                        price
+                        price: new Price(roundNumber(price.amount), price.currency)
                     } as FoodContainer;
 
                     db.foods[foodId].containers.push(container);

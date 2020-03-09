@@ -96,7 +96,13 @@ const FormComponent: React.FC<FormProps> = ({
 
     // functions for manipulating form states
     const setField = (field: string, value: ValueTypes) => {
-        setForm({...form, [field]: value});
+        const type = typeof(initialValues[field]);
+        // resolve the problem of number fields when empty string is sent to the form
+        if (type === 'number') {
+            setForm({...form, [field]: parseFloat(value as string) || 0});
+        } else {
+            setForm({...form, [field]: value});
+        }
     };
     
     const allDisabledFieldNames = disabledFields ? disabledFields(form) : [];
