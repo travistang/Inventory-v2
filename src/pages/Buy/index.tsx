@@ -71,19 +71,21 @@ const BuyPage: React.FC = () => {
                     title="Nothing to buy yet"
                     subtitle="Click the '+' button above to add a new item">
                     <>
-                        {
-                            pendingBuyOrders.map((order, i) => (
-                                <PendingOrderCard order={order} 
-                                    actionButton={{
-                                        iconName: 'cancel',
-                                        onClick: () => setPendingBuyOrders(
-                                            // remove this order from the list of pending orders
-                                            pendingBuyOrders.filter((_, j) => i !== j)
-                                        )
-                                    }}
-                                />
-                            ))
-                        }
+                        <div className="BuyPage-PendingItemContainers">
+                            {
+                                pendingBuyOrders.map((order, i) => (
+                                    <PendingOrderCard order={order} 
+                                        actionButton={{
+                                            iconName: 'cancel',
+                                            onClick: () => setPendingBuyOrders(
+                                                // remove this order from the list of pending orders
+                                                pendingBuyOrders.filter((_, j) => i !== j)
+                                            )
+                                        }}
+                                    />
+                                ))
+                            }
+                        </div>
                         {
                             !openSelectPopup && (
                                 <PendingInfoSummary orders={pendingBuyOrders} />
