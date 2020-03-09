@@ -2,7 +2,7 @@ import React from 'react';
 import { Price } from '../../data/typedefs';
 import { Icon } from '@material-ui/core';
 import PercentageBar from '../../components/PercentageBar';
-import { getDifferenceInDaysFromNow } from '../../utils';
+import { getDifferenceInDaysFromNow, roundNumber } from '../../utils';
 import "./style.scss";
 
 type ContainerCardProps = {
@@ -44,7 +44,7 @@ const ContainerCard : React.FC<ContainerCardProps> = ({
             <div className="ContainerCard-ContainerLeft">
                 {getDifferenceInDaysFromNow(datePurchased)} days old
                 <Icon style={{color, fontSize: 32}}>{containerIcon}</Icon>
-                {price.amount} {price.currency}
+                {roundNumber(price.amount)} {price.currency}
             </div>
             <div className="ContainerCard-ContainerRight">
                 <div className="ContainerCard-ContainerRightUp">

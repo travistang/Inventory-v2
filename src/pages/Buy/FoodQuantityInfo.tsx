@@ -131,7 +131,8 @@ const FoodQuantityInfoComponent: React.FC<FoodQuantityInfoProps> = ({
         }
     });
     if (loading) return null;
-
+    console.log('form')
+    console.log(form)
     const onSave = () => {
         const {
             amount, price, currency, containerCount, priceType, expiryDate
@@ -150,6 +151,9 @@ const FoodQuantityInfoComponent: React.FC<FoodQuantityInfoProps> = ({
 
         onInfoProvided(buyOrders);
     };
+
+    const isFormValid = form.amount > 0 && form.containerCount > 0 && form.price >= 0;
+
     return (
         <div className="FoodQuantityInfo-Container">
             { !loading && (
@@ -169,7 +173,7 @@ const FoodQuantityInfoComponent: React.FC<FoodQuantityInfoProps> = ({
             </div>
             <div className="FoodQuantityInfo-ButtonRow">
                 <Button title="Previous" icon="navigate_before" color="secondary" onClick={onPreviousStepRequested} />
-                <Button title="Next" icon="save" color="info" onClick={onSave} />
+                <Button title="Next" icon="save" color="info" onClick={onSave} disabled={!isFormValid} />
             </div>
         </div>
     )
