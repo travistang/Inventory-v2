@@ -1,6 +1,7 @@
 import React from 'react';
 import { FoodContainer } from '../../data/typedefs';
 import { Icon } from '@material-ui/core';
+import _ from 'lodash';
 
 const STATUS_COLOR = {
     UNOPENED: {
@@ -30,8 +31,7 @@ const ContainerOverview: React.FC<ContainerOverviewProps> = ({
     containers
 }) => {
     const now = new Date().getDate();
-
-    const icons = containers.map(({
+    const statusList : { status : keyof typeof STATUS_COLOR}[] = containers.map(({
         expiryDate,
         dateOpened,
     }, i) => {
@@ -46,15 +46,29 @@ const ContainerOverview: React.FC<ContainerOverviewProps> = ({
             status = opened ? "OPENED" : "UNOPENED";
         }
 
-        const { icon, color } = STATUS_COLOR[status];
-        return (
-            <Icon key={i} style={{color}}>{icon}</Icon>
-        );
+        return { status }
     });
 
+    const counts = _.groupBy(statusList, "status");
     return (
         <>
-            {icons}
+            {
+                (
+                    Object.keys(counts).sort((a, b) => counts[a].length - counts[b].length) as (keyof typeof STATUS_COLOR)[]
+                ).map(status => (
+                    <div style={{
+                        color: STATUS_COLOR[status].color, 
+                        display: 'flex', 
+                        alignItems: 'center', 
+                        marginRight: 4 
+                    }}>
+                        <Icon style={{color: STATUS_COLOR[status].color }}>
+                            {STATUS_COLOR[status].icon} 
+                        </Icon>
+                        {counts[status].length > 1 && `x ${counts[status].length}`}
+                    </div>
+                ))
+            }
         </>
     );
 };

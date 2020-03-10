@@ -7,7 +7,7 @@ const ContainerPage: React.FC = () => {
 };
 
 export default withHeader(ContainerPage,{
-    title: "Containers",
+    title: "Assets",
     navButtons: [
         {
             iconName: "add",

@@ -29,15 +29,7 @@ import './App.scss';
 
 const RouteSwitch: React.FC = () => {
   const query = new URLSearchParams(useLocation().search);
-  // const query = new URLSearchParams(search);
-  // const [pageName, setPageName] = React.useState("");
 
-  // React.useEffect(() => {
-  //   setPageName(new URLSearchParams(search || "").get('page') || "");
-  // }, [search]);
-  console.log('query');
-  console.log(query);
-  console.log(useLocation().search);
   switch(query.get('page')) {
     case PageNames.FOOD_LIST:
       return <FoodPage />

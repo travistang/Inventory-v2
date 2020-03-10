@@ -28,7 +28,7 @@ const BuyPage: React.FC = () => {
     const { setNavOptions } = useHeader();
     React.useEffect(() => {
         setNavOptions({
-            title: "Buy",
+            title: "Purchase Food",
             navButtons: [
                 {
                     iconName: "add",

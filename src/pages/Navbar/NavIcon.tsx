@@ -16,7 +16,6 @@ const NavIcon: React.FC<NavIconProps> = ({
             <div className={`NavIcon ${active?"NavIcon-Active":""}`}>
                 <Icon style={{color: active?"primary":"text"}}>{icon}</Icon>
                 {' '}
-                {title}
             </div>
         </div>
     )

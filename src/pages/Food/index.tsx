@@ -86,7 +86,7 @@ const FoodPage: React.FC<FoodPageProps> = () => {
 
 
 export default withHeader(FoodPage, {
-    title: "Food",
+    title: "Your Food",
     navButtons: [
         {iconName: "add", onClick: () => history.push(Routes.FOOD_ADD)}
     ]
