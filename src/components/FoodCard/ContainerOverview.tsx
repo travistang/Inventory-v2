@@ -1,6 +1,7 @@
 import React from 'react';
 import { FoodContainer } from '../../data/typedefs';
 import { Icon } from '@material-ui/core';
+import { isTimeInPast } from '../../utils';
 import _ from 'lodash';
 
 const STATUS_COLOR = {
@@ -30,14 +31,13 @@ type ContainerOverviewProps = {
 const ContainerOverview: React.FC<ContainerOverviewProps> = ({
     containers
 }) => {
-    const now = new Date().getDate();
     const statusList : { status : keyof typeof STATUS_COLOR}[] = containers.map(({
         expiryDate,
         dateOpened,
     }, i) => {
 
         let status = Object.keys(STATUS_COLOR)[0] as StatusTypes;
-        const expired = !!expiryDate && new Date(expiryDate).getDate() < now;
+        const expired = !!expiryDate && isTimeInPast(expiryDate);
         const opened  = !!dateOpened;
 
         if (expired) {
@@ -50,6 +50,7 @@ const ContainerOverview: React.FC<ContainerOverviewProps> = ({
     });
 
     const counts = _.groupBy(statusList, "status");
+
     return (
         <>
             {

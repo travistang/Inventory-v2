@@ -18,6 +18,10 @@ export const getDifferenceInDaysFromNow = (date: Date) => {
         ));
 }
 
+export const isTimeInPast = (time: Date) => {
+    return new Date(time).getTime() < new Date().getTime();
+}
+
 export const randomString = (length: number) => {
     let result           = '';
     const characters       = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';

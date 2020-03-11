@@ -1,5 +1,4 @@
 $colors: (
-  
   "primary": #506075,
   "primary2": #191919,
   "primary3": #303030,
@@ -110,8 +109,13 @@ button {
   outline: none;
 }
 
+input:focus {
+  border: none;
+}
 // https://stackoverflow.com/questions/826782/how-to-disable-text-selection-highlighting
 * {
+  -webkit-tap-highlight-color: rgba(0,0,0,0);
+
   -webkit-touch-callout: none; /* iOS Safari */
     -webkit-user-select: none; /* Safari */
      -khtml-user-select: none; /* Konqueror HTML */
@@ -120,3 +124,4 @@ button {
             user-select: none; /* Non-prefixed version, currently
                                   supported by Chrome, Opera and Firefox */
 }
+

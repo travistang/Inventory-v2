@@ -5,7 +5,7 @@ import {
     ConsumeOrder 
 } from './typedefs';
 import md5 from 'blueimp-md5';
-import { convertToFloat, randomString, roundNumber } from '../utils';
+import { convertToFloat, randomString, roundNumber, isTimeInPast } from '../utils';
 
 export const localStorageKey = 'db';
 
@@ -52,8 +52,7 @@ const resolvers = {
            return !!container.dateOpened;
         },
         expired: (container: FoodContainer) => {
-            return (!!container.expiryDate) && 
-                (new Date(container.expiryDate).getDate() < new Date().getDate());
+            return (!!container.expiryDate) && isTimeInPast(container.expiryDate);
         },
         percentageLeft: (container: FoodContainer) => {
             return container.amount / container.capacity * 100;
