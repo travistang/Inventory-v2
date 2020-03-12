@@ -44,7 +44,6 @@ const SelectFoodPopup: React.FC<SelectFoodPopupProps> = ({
     );
     
     React.useEffect(() => {
-        // setStep(0);
         setForm(initialFormValue);
     }, [open]);
 

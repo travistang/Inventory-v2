@@ -85,6 +85,7 @@ const FoodDetailsPage: React.FC = () => {
             ...navOptions,
             title: foodName as string,
             withBackButton: true,
+            navButtons: []
             // navButtons: [{ 
                 // iconName: "edit", 
                 // onClick: () => history.push({
