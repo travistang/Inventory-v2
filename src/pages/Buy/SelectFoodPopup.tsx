@@ -1,11 +1,21 @@
 import React from 'react';
-import { BuyOrder } from '../../data/typedefs';
+import { BuyOrder, Currency } from '../../data/typedefs';
 import FoodTypePicker from "../../components/FoodTypePicker";
 import FoodQuantityInfo from "./FoodQuantityInfo";
 import Button from '../../components/Button';
 import CenterNotice from '../../components/CenterNotice';
 import Wizard from '../../components/Wizard';
 import "./style.scss";
+
+type BuyOrderFormType = {
+    selectedFood: string,
+    price: number,
+    currency: Currency,
+    amount: number,
+    containersCount: number,
+    priceType: "Each Container" | "All Containers" | null,
+    expiryDate: Date | null
+};
 
 type SelectFoodPopupProps = {
     open: boolean;
@@ -16,14 +26,26 @@ type SelectFoodPopupProps = {
 const SelectFoodPopup: React.FC<SelectFoodPopupProps> = ({
     open, requestClose, style, onBuyOrdersAdded
 }) => {
-    // number of steps the picker is picking
-    // const [step, setStep] = React.useState(0);
 
+    const initialFormValue : BuyOrderFormType = {
+        selectedFood: "",
+        price: 0,
+        currency: "EUR",
+        amount: 0,
+        containersCount: 0, 
+        priceType: "Each Container",
+        expiryDate: null
+    };
     const [selectedFood, setSelectedFood] = React.useState(null as string | null);
-   
+    const [ form, setForm ]               = React.useState(initialFormValue);
+
+    const setFormField = (fieldName: string, value: any) => (
+        setForm({...form, [fieldName]: value})
+    );
+    
     React.useEffect(() => {
         // setStep(0);
-        setSelectedFood(null);
+        setForm(initialFormValue);
     }, [open]);
 
     if (!open)return null;
@@ -49,7 +71,10 @@ const SelectFoodPopup: React.FC<SelectFoodPopupProps> = ({
             case 0:
                 return (
                     <FoodTypePicker 
-                        onFoodSelected={food => {setSelectedFood(food); setStep(1)}} 
+                        onFoodSelected={food => {
+                            setFormField("selectedFood", food); 
+                            setStep(1);
+                        }} 
                     />
                 );
             case 1:
