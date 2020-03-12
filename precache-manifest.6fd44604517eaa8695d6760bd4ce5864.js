@@ -1,27 +1,27 @@
 self.__precacheManifest = (self.__precacheManifest || []).concat([
   {
-    "revision": "7cc268e15f5b21cde31059b0d0a85715",
+    "revision": "9c1a208707646b387ffe61bca64f4e63",
     "url": "/Inventory-v2/index.html"
   },
   {
-    "revision": "5b8e3983ae4ed0f1e6a3",
+    "revision": "3f81bf469cb512a31dff",
     "url": "/Inventory-v2/static/css/2.a6ab3c2a.chunk.css"
   },
   {
-    "revision": "73ec0735ba2cb1aa351a",
+    "revision": "d71b93fdad5938889a05",
     "url": "/Inventory-v2/static/css/main.f9aa4616.chunk.css"
   },
   {
-    "revision": "5b8e3983ae4ed0f1e6a3",
-    "url": "/Inventory-v2/static/js/2.6617d2a1.chunk.js"
+    "revision": "3f81bf469cb512a31dff",
+    "url": "/Inventory-v2/static/js/2.a8f3a75a.chunk.js"
   },
   {
     "revision": "8eb955e111b178f322cd41691014942b",
-    "url": "/Inventory-v2/static/js/2.6617d2a1.chunk.js.LICENSE"
+    "url": "/Inventory-v2/static/js/2.a8f3a75a.chunk.js.LICENSE"
   },
   {
-    "revision": "73ec0735ba2cb1aa351a",
-    "url": "/Inventory-v2/static/js/main.77d34733.chunk.js"
+    "revision": "d71b93fdad5938889a05",
+    "url": "/Inventory-v2/static/js/main.7877102e.chunk.js"
   },
   {
     "revision": "a32985cf4bc1485289aa",
