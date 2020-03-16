@@ -77,7 +77,7 @@ const formLayout: FormLayout = [
         {
             label: "Price is for...", type: "select",
             name: "priceType", iconName: "live_help",
-            options: ["Each Container", "All Containers"],
+            options: [0, 1],
         }
     ],
     [
@@ -100,7 +100,7 @@ type FormType = {
     price: number,
     currency: Currency,
     containerCount: number,
-    priceType: "Each Container" | "All Containers",
+    priceType: 0 | 1,
     expiryDate: Date | null,
 }
 
@@ -109,7 +109,7 @@ const initialValue: FormType = {
     price: 0,
     currency: "EUR",
     containerCount: 1,
-    priceType: "All Containers",
+    priceType: 1,
     expiryDate: null
 }
 
@@ -131,8 +131,6 @@ const FoodQuantityInfoComponent: React.FC<FoodQuantityInfoProps> = ({
         }
     });
     if (loading) return null;
-    console.log('form')
-    console.log(form)
     const onSave = () => {
         const {
             amount, price, currency, containerCount, priceType, expiryDate
@@ -142,7 +140,7 @@ const FoodQuantityInfoComponent: React.FC<FoodQuantityInfoProps> = ({
             amount, 
             price: {
                 currency, 
-                amount: (priceType === "All Containers") ? 
+                amount: (priceType === 1) ? 
                     price / containerCount : price
             },
             foodName: food as string,

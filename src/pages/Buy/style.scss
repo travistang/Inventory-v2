@@ -28,19 +28,20 @@
     // to make the last row not be blocked by the buttons
     padding-bottom: 50px; 
 }
-.FoodQuantityInfo-ButtonRow {
-
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    
+.FoodQuantityInfo-ButtonRow {    
     display: flex;
     flex-direction: row;
     background-color: map-get($colors, "primary2");
-
-    .Button {
-        flex: 1;
+    justify-content: space-between;
+    padding-left: 24px;
+    padding-right: 24px;
+    .Button:nth-last-child(1) {
+        // flex: 1;
+        flex-direction: row-reverse;
+        color: map-get($colors , "info");
+        * {
+            color: map-get($colors , "info");
+        }
     }
 }
 

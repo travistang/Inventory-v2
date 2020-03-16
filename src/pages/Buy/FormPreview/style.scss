@@ -1,0 +1,48 @@
+@import "../../../App.scss";
+
+.FormPreview-Container {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, auto);
+    // justify-content: center;
+    // flex-direction: column;
+    margin-top: 24px;
+    margin-bottom: 24px;
+    margin-left: 22px;
+    margin-right: 22px;
+    div {
+        display: flex;   
+    }
+    div > div {
+        display: flex;
+        align-items: center;
+    }
+}
+
+.FormPreview-Top,
+.FormPreview-Bottom {
+    display: flex;
+    justify-content: space-between;
+}
+
+.FormPreview-TopLeft {
+    font-size: 24px;
+    display: flex;
+    align-items: center;
+    span {
+        margin-left: 8px;
+    }
+}
+
+.FormPreview-TopRight {
+    font-size: 24px;
+    color: map-get($colors, "info");
+    text-align: right;
+}
+
+.FormPreview-BottomLeft {
+    color: map-get($colors, "info");
+    * {
+        color: map-get($colors, "info");
+    }
+    text-align: left;
+}

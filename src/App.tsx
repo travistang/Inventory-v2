@@ -51,10 +51,10 @@ const RouteSwitch: React.FC = () => {
 }
 const App: React.FC = () => {
   return (
-    <div className="App">
-      <ApolloProvider client={client}>
+    <ApolloProvider client={client}>
+      <div className="App">
         <Provider store={store}>
-            <Router  history={history}>
+            <Router history={history}>
                 <HeaderContainer>
                   <div className="Page">
                     <Switch>
@@ -66,8 +66,8 @@ const App: React.FC = () => {
                 <NavBar />
             </Router>
         </Provider>
-      </ApolloProvider>
-    </div>
+      </div>
+    </ApolloProvider>
   );
 }
 

@@ -1,0 +1,42 @@
+@import "../../../App.scss";
+
+$selectedColor: map-get($colors, "info");
+$textColor: map-get($colors, "text");
+
+.Chip, .Chip-Selected {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    // margin: 8px;
+    padding: 16px;
+    cursor: pointer;
+    :nth-child(1) {
+        margin-right: 8px;
+    }
+    // min-width: 10vw;
+}
+.Chip {
+    border: 1px solid $textColor;
+    background-color: transparent;
+}
+
+.Chip-Selected {
+    border: 1px solid $selectedColor;
+    // background-color: $selectedColor;
+    color: $selectedColor;
+    * {
+        color: $selectedColor;
+    }
+}
+
+
+.ChipSelect-Container {
+    display: grid;
+    // maximum 4 rows
+    // width: 100%;
+    grid-template-columns: repeat(auto-fit, minmax(48px, 1fr));
+    gap: 8px;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    align-items: stretch;
+}

@@ -152,7 +152,6 @@ const FoodDetailsPage: React.FC = () => {
                 Top section
             */}
              <div className="FoodDetails-TopSection">
-                 <h6>Summary</h6>
                  <div className="FoodDetails-TopSection-AuxInfoRow">
                      {
                          auxConfigs.map(config => (

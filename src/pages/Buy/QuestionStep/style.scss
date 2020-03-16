@@ -1,0 +1,25 @@
+@import "../../../App.scss";
+
+.QuestionStep-Container {
+    display: flex;
+    flex-direction: column;
+
+    padding: 16px;
+}
+
+.QuestionStep-QuestionContainer {
+    display: flex;
+    flex-direction: column;
+    margin-top: 8px;
+    margin-bottom: 8px;
+    .QuestionStep-QuestionText {
+        :not:nth-child(1) {
+            margin-top: 24px;
+        }
+        display: flex;
+        margin-bottom: 8px;
+        font-size: 18px;
+        // flex: 1;
+        background-color: map-get($colors, "background");
+    }
+}

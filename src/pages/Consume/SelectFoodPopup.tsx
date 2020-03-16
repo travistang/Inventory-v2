@@ -86,11 +86,12 @@ const SelectFoodPopup: React.FC<SelectFoodPopupProps> = ({
     }
 
     return (
-        <Wizard 
+        <Wizard
             open={open} 
             requestClose={requestClose}
+            totalSteps={3}
             headerTitle={headerTitle}>
-                {popupContent}
+            {popupContent}
         </Wizard>
     );
 };

@@ -27,7 +27,7 @@ export type InputProps = InputConfigProps & {
     disabled?: boolean
 }
 
-const Input: React.FC<InputProps> = ({
+const Input: React.FC<InputProps | InputProps & SelectConfigProps> = ({
     onChange: rawOnChange, value,
     // validation props
     required = false, validate = () => true,
@@ -117,7 +117,15 @@ const Input: React.FC<InputProps> = ({
                             {...props}
                             className={finalClassName}
                             placeholder={placeholder}
-                            onChange={e => onChange(e.target.value)}
+                            onChange={e => {
+                                switch(type) {
+                                    case "number":
+                                        onChange(parseFloat(e.target.value));
+                                        break;
+                                    default:
+                                        onChange(e.target.value);
+                                }
+                            }}
                             type={type}
                             value={valueToDisplay(value, type)}
                         />
@@ -136,3 +144,4 @@ const Input: React.FC<InputProps> = ({
 }
 
 export default Input;
+export * from "./ChipSelect";

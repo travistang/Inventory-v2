@@ -3,7 +3,7 @@ import CenterNotice from '../../components/CenterNotice';
 import { withHeader } from '../Header';
 
 const ContainerPage: React.FC = () => {
-    return <CenterNotice iconName="work-outline" title="Coming Soon!" />
+    return <div>Hello world</div>;
 };
 
 export default withHeader(ContainerPage,{

@@ -5,13 +5,15 @@ import "./style.scss";
 
 type WizardProps = {
     open: boolean;
+    totalSteps: number;
     requestClose: () => void;
     style?: object;
     children: (step: number, toStep: (step: number) => void) => React.ReactNode;
     headerTitle: (step: number) => string;
 }
 const Wizard: React.FC<WizardProps> = ({
-    open, requestClose, children, style, headerTitle
+    open, requestClose, children, style, headerTitle,
+    totalSteps
 }) => {
     const [step, setStep] = React.useState(0);
     
@@ -35,7 +37,7 @@ const Wizard: React.FC<WizardProps> = ({
                     </div>
                 </div>
             </div>
-            <StepIndicator step={step} totalSteps={3} />
+            <StepIndicator step={step} totalSteps={totalSteps} />
             <div className="Wizard-Content">
                 { children(step, setStep) }
             </div>
