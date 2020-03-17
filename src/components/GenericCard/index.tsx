@@ -13,15 +13,17 @@ export type GenericCardProps = GenericCardExtraProps & {
     mainText: string,
     rightComponent: React.ReactNode,
     smallComponent?: React.ReactNode,
-    onClick?: () => void
+    onClick?: () => void,
+    style?: object
 };
 
 const GenericCard: React.FC<GenericCardProps> = ({
     mainText, rightComponent, smallComponent, onClick,
-    actionButton
+    actionButton,
+    style
 }) => {
     return (
-        <div className="GenericCard" onClick={onClick}>
+        <div className="GenericCard" onClick={onClick} style={style}>
             {
                 actionButton && (
                     <div className="GenericCard-ActionButton">

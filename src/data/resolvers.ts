@@ -4,8 +4,12 @@ import {
     BuyOrder,
     ConsumeOrder 
 } from './typedefs';
-import md5 from 'blueimp-md5';
-import { convertToFloat, randomString, roundNumber, isTimeInPast } from '../utils';
+import { 
+    convertToFloat, 
+    randomString, 
+    roundNumber, 
+    isTimeInPast 
+} from '../utils';
 
 export const localStorageKey = 'db';
 
@@ -22,8 +26,8 @@ const loadDatabase = () => {
     if (!db) {
         localStorage.setItem(localStorageKey, 
             JSON.stringify(initialDatabase));
-        return initialDatabase;
-    } else {
+            return initialDatabase;
+        } else {
         return JSON.parse(db) as DataBaseType;
     }
 };
@@ -31,6 +35,23 @@ const loadDatabase = () => {
 const saveDatabase = (newDb: DataBaseType) => {
     return localStorage.setItem(localStorageKey, JSON.stringify(newDb));
 };
+
+export const correctDatabase = () => {
+    const db = loadDatabase();
+    if (!db.foods) {
+        db.foods = [];
+    }
+
+    db.foods.forEach((food, i, foodList) => {
+        if (!food.containers) {
+            foodList[i].containers = [];
+        }
+        if (!food.stockLevel) {
+            food.stockLevel = 0;
+        }
+    });
+    saveDatabase(db);
+}
 
 const resolvers = {
     Query: {
@@ -84,6 +105,8 @@ const resolvers = {
                 0 : 
                 totalAmount / totalCapacity * 100;
             
+            const understock = food.stockLevel && food.stockLevel > totalAmount;
+
             return {
                 __typename: "FoodInfo",
                 numberOfContainers,
@@ -92,6 +115,7 @@ const resolvers = {
                 totalAmount,
                 totalWorth,
                 percentageLeft,
+                understock
             };
         }
     },
@@ -138,6 +162,23 @@ const resolvers = {
             saveDatabase(db);
             return newFoodContainers;
         },
+        editFood: (
+            _: any, 
+            { originalName, newData } : 
+            { originalName: string, newData: Food}) => {
+            const db = loadDatabase();
+            db.foods = db.foods.map(food => {
+                if (food.name !== originalName) return food;
+                else return {
+                    ...newData,
+                    containers: food.containers // retain the containers as they should not be modified
+                };
+            });
+
+            saveDatabase(db);
+            return newData;
+        },
+
         consumeFoods: (_: any, { consumeOrders }: {consumeOrders: ConsumeOrder[]}) => {
             const db = loadDatabase();
             let hasError = false;
@@ -148,7 +189,6 @@ const resolvers = {
                 );
 
                 if (foodId < 0) {
-                    console.log("food id < 0");
                     hasError = true;
                     return;
                 };
@@ -159,7 +199,6 @@ const resolvers = {
                 // check if container is okay to deduct
                 const container = db.foods[foodId].containers[containerIndex] as FoodContainer;
                 if (container.amount < amount) {
-                    console.log('amount isnt right');
                     hasError = true;
                     return;
                 }

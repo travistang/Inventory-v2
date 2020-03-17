@@ -75,8 +75,8 @@ const SelectFoodPopup: React.FC<SelectFoodPopupProps> = ({
                             subtitle="You can choose 'Add Another' to add another record, or 'Close' to review your consumption order." 
                         />
                         <div className="FoodQuantityInfo-ButtonRow">
-                            <Button title="Close" icon="close" color="secondary" onClick={requestClose} />
-                            <Button title="Add Another" icon="refresh" color="info" onClick={() => setStep(0)} />
+                            <Button title="Close" icon="close" color="" onClick={requestClose} />
+                            <Button title="Add Another" icon="refresh" color="" onClick={() => setStep(0)} />
                         </div>
                     </>
                 )

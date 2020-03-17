@@ -26,6 +26,7 @@ const QUERY = gql`
             info {
                 numberOfContainers
                 totalAmount
+                understock
             }
         }
     }
@@ -34,8 +35,6 @@ const QUERY = gql`
 
 const FoodPage: React.FC<FoodPageProps> = () => {
     const { loading, error, data, refetch } = useQuery(QUERY);
-    // the current query, mostly is ?page=...
-    const currentQuery = useLocation().search;
 
     React.useEffect(() => {
         refetch()
@@ -50,7 +49,7 @@ const FoodPage: React.FC<FoodPageProps> = () => {
     }
 
     
-    const foods = data.foods as Food[];
+    const foods = data.foods.sort((fa: Food, fb: Food) => fa.name.localeCompare(fb.name)) as Food[];
 
 
     return (

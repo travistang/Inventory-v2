@@ -60,6 +60,7 @@ export interface FoodInfo {
 }
 
 export interface Food {
+    stockLevel?: number,
     unit: Unit,
     name: string,
     containers: FoodContainer[],
@@ -124,9 +125,12 @@ export const typeDefs = `
         totalWorth: Number!
 
         percentageLeft: Number!
+
+        understock: Boolean!
     }
 
     type Food {
+        stockLevel: Number,
         name: String!
         unit: Unit!,
         containers: [FoodContainer!]!
@@ -153,6 +157,7 @@ export const typeDefs = `
     type Mutation {
         addFood(name: String!, unit: Unit!): Food
         buyFood(buyOrders: [BuyOrder]!): [FoodContainer]
+        editFood(originalName: String!, newData: Food!): Food
         consumeFoods(consumeOrders: [ConsumeOrder]!): [ID!]
     }
 `;

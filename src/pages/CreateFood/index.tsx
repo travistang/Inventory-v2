@@ -47,6 +47,11 @@ export const formLayout: FormLayout = (
         name: "unit", placeholder: "Unit", required: true,
         flex: 4, type: "select",
         options: Object.values(RawUnit)
+    }],
+    [{
+        label: "Expected Stock Level", type: "number",
+        name: "stockLevel", placeholder: "Stock level",
+        validate: v => v === null || v >= 0
     }]
 ];
 

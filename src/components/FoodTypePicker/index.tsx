@@ -18,7 +18,8 @@ const GET_FOOD_LIST = gql`
             }
             info {
                 totalAmount
-                numberOfContainers   
+                numberOfContainers
+                understock   
             }
         }
     }
@@ -29,7 +30,8 @@ type QueryResultType = {
     containers: FoodContainer[],
     info: {
         totalAmount: number,
-        numberOfContainers: number
+        numberOfContainers: number,
+        understock: boolean
     }
 };
 
@@ -57,10 +59,25 @@ const FoodTypePicker: React.FC<FoodTypePickerProps> = ({
     }
 
     const foodOptions = data.foods as QueryResultType[];
-    const finalOptions = filterFood ? 
+    const filteredOptions = filterFood ? 
         foodOptions.filter(filterFood) 
         : foodOptions;
     
+    /*
+        sort results according to....
+        if a food is understock, put it to priority
+        if both food are understock / not understock, sort by the number of containers
+        if they have the same number of containers, sort by their name
+    */
+    const finalOptions = filteredOptions.sort((foodA, foodB) => {
+        
+        if (foodA.info.understock && !foodB.info.understock) return -1;
+        if (foodA.info.understock && !foodB.info.understock) return 1;
+
+        const containerDiff = foodA.containers.length - foodB.containers.length;
+        if (containerDiff !== 0) return containerDiff;
+        return foodA.name.toLowerCase().localeCompare(foodB.name.toLowerCase());
+    })
     return (
         <div className="FoodTypePicker-Container">
             <CenterNoticeSwitch 

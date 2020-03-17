@@ -85,14 +85,10 @@ const FoodDetailsPage: React.FC = () => {
             ...navOptions,
             title: foodName as string,
             withBackButton: true,
-            navButtons: []
-            // navButtons: [{ 
-                // iconName: "edit", 
-                // onClick: () => history.push({
-                //     pathname: Routes.FOOD_EDIT,
-                //     search: `?food=${foodName}`
-                // })
-            // }]
+            navButtons: [{ 
+                iconName: "edit", 
+                onClick: () => history.push(`${Routes.FOOD_EDIT}&food=${foodName as string}`)
+            }]
         });
     }, []);
 

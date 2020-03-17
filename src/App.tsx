@@ -10,6 +10,7 @@ import 'react-toastify/dist/ReactToastify.css';
 // pages
 import FoodPage from './pages/Food';
 import CreateFoodPage from './pages/CreateFood';
+import EditFoodPage from './pages/EditFood';
 import FoodDetailsPage from './pages/FoodDetails';
 import ContainerPage from './pages/Container';
 import SettingsPage from './pages/Settings';
@@ -18,11 +19,12 @@ import ConsumePage from './pages/Consume';
 
 import store from './reducers';
 import  {Provider} from 'react-redux';
-import Routes, { PageNames, BaseName } from './routes';
+import Routes, { PageNames } from './routes';
 import { HeaderContainer } from './pages/Header';
 
 import client from './data/graphql';
 import { ApolloProvider } from '@apollo/react-hooks';
+import { correctDatabase } from './data/resolvers';
 
 
 import './App.scss';
@@ -35,6 +37,8 @@ const RouteSwitch: React.FC = () => {
       return <FoodPage />
     case PageNames.FOOD_ADD:
       return <CreateFoodPage />
+    case PageNames.FOOD_EDIT:
+      return <EditFoodPage />
     case PageNames.CONTAINERS_LIST:
       return <ContainerPage />
     case PageNames.FOOD_DETAILS:
@@ -50,6 +54,12 @@ const RouteSwitch: React.FC = () => {
   }
 }
 const App: React.FC = () => {
+
+  // correct database when the App just loads
+  React.useEffect(() => {
+      correctDatabase();
+  }, []);
+
   return (
     <ApolloProvider client={client}>
       <div className="App">

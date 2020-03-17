@@ -41,7 +41,8 @@ type FormProps = {
     onSubmit?: (form: FormValueType) => void,
     withSubmitButton?: boolean,
     disabledFields?: (form: FormValueType) => string[],
-    setFormValue?: (form: FormValueType) => void
+    setFormValue?: (form: FormValueType) => void,
+    disableSubmitButton?: boolean
 }
 
 const FormComponent: React.FC<FormProps> = ({
@@ -51,7 +52,9 @@ const FormComponent: React.FC<FormProps> = ({
     onSubmit,
     withSubmitButton = true,
     disabledFields,
-    setFormValue
+    setFormValue,
+
+    disableSubmitButton
 }) => {
 
     // see if the incoming layout is a function
@@ -145,7 +148,7 @@ const FormComponent: React.FC<FormProps> = ({
                         title={submitButtonText || "Submit"}
                         icon={submitIconName}
                         onClick={onSubmit && (() => onSubmit(form))}
-                        disabled={!isAllFieldsValid}
+                        disabled={!isAllFieldsValid || disableSubmitButton}
                         className="Form-Submit"
                     />
                 )
