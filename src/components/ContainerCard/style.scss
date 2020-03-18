@@ -1,3 +1,5 @@
+@import "../../App.scss";
+
 .ContainerCard-Container {
     display: flex;
     flex-direction: row;
@@ -46,10 +48,10 @@
 
 @mixin ContainerCardColor($color) {
     .ContainerCard-Container-#{$color} * {
-        color: $color;
+        color: map-get($colors, $color);
     }
 };
 
-@include ContainerCardColor(red);
-@include ContainerCardColor(white);
-@include ContainerCardColor(orange);
+@include ContainerCardColor("info");
+@include ContainerCardColor("text");
+@include ContainerCardColor("red");

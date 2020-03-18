@@ -19,6 +19,7 @@ const FOOD_DETAIL_QUERY = gql`
         food(name: $food) @client {
             name
             unit
+            stockLevel
             containers {
                 capacity
                 amount
@@ -38,6 +39,7 @@ const FOOD_DETAIL_QUERY = gql`
                 totalAmount
                 totalWorth
                 percentageLeft
+                understock
             }
         }
     }
@@ -45,6 +47,7 @@ const FOOD_DETAIL_QUERY = gql`
 type QueryResultType = {
     name: string,
     unit: string,
+    stockLevel: number,
     containers: [{
         capacity: number,
         amount: number,
@@ -63,7 +66,8 @@ type QueryResultType = {
         openedContainers: number,
         totalAmount: number,
         totalWorth: number,
-        percentageLeft: number
+        percentageLeft: number,
+        understock: boolean
     }
 }
 const FoodDetailsPage: React.FC = () => {
@@ -118,7 +122,12 @@ const FoodDetailsPage: React.FC = () => {
             title: "Percentage Left",
             iconName: "percentage",
             value: `${roundNumber(food.info.percentageLeft)} %`
-        }
+        },
+        {
+            title: "Target Stock Amount",
+            iconName: "",
+            value: `${food.stockLevel} ${food.unit}`
+        },
     ];
 
     const listInfoConfigs: ListInfoItemProps[] = [

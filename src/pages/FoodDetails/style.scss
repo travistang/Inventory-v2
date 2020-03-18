@@ -42,7 +42,9 @@
 }
 
 .FoodDetails-TopSection-AuxInfoRow {
-    display: flex;
+    display: grid;
+    gap: 8px;
+    grid-template-columns: repeat(2, 1fr);
     flex-direction: row;
     justify-content: space-between;
     
@@ -53,7 +55,7 @@
 }
 
 .FoodDetails-TopSection-AuxInfoRow > .AuxInfo {
-    padding: 16px;
+    // padding: 16px;
 }
 
 .AuxInfo > * {

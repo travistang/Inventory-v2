@@ -72,7 +72,7 @@ const FoodTypePicker: React.FC<FoodTypePickerProps> = ({
     const finalOptions = filteredOptions.sort((foodA, foodB) => {
         
         if (foodA.info.understock && !foodB.info.understock) return -1;
-        if (foodA.info.understock && !foodB.info.understock) return 1;
+        if (!foodA.info.understock && foodB.info.understock) return 1;
 
         const containerDiff = foodA.containers.length - foodB.containers.length;
         if (containerDiff !== 0) return containerDiff;

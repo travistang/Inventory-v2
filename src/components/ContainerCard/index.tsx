@@ -29,7 +29,7 @@ const ContainerCard : React.FC<ContainerCardProps> = ({
     unit, onClick
 }) => {
     
-    const color = expired ? "red" : (opened ? "orange" : "white");
+    const color = expired ? "red" : (opened ? "info" : "text");
     const containerIcon = expired ? "delete_forever" : "kitchen";
 
     const expireDateString = () => {

@@ -11,30 +11,16 @@ type PercentageBarProps = {
 const PercentageBar: React.FC<PercentageBarProps> = ({
     color, percentageLeft, percentageDifference = 0
 }) => (
-    <div className="PercentageBar">
-        <div style={{ flexGrow: percentageLeft - percentageDifference, backgroundColor: color, height: 8 }}>
-
-        </div>
-        {
-            percentageDifference ? (
-                <div style={{
-                    flexGrow: percentageDifference, 
-                    height: 8, 
-                    background: `repeating-linear-gradient(
-                        -50deg,
-                        transparent,
-                        transparent 25%,
-                        ${color} 25%,
-                        ${color} 50%,
-                        transparent 50%
-                    ) top left fixed`,
-                    backgroundSize: '30px 30px'
-                }}/>
-            ) : null
-        }
-        <div style={{ flex: 100 - percentageLeft, backgroundColor }}>
-
-        </div>
+    <div className="PercentageBar" style={{ 
+        gridTemplateColumns: (() => {
+            const s = `${percentageLeft - percentageDifference}% ${percentageDifference}% ${100 - percentageLeft}%`;
+            console.log(s);
+            return s;
+        })()
+    }}>
+        <div />
+        <div />
+        <div />
     </div>
 );
 
