@@ -1,7 +1,7 @@
 import React from 'react';
 import Form, { FormLayout } from '../../components/Form';
-
-const AmountInterpretationType = {
+import Input, { ChipSelect, ValueTypes } from '../../components/Input';
+const AmountInterpretationType : {[key: string]: number} = {
     "Amount Used": 0,
     "Amount Left": 1,
     "Percentage Left": 2,
@@ -12,22 +12,6 @@ type FormValueType = {
     amount: number;
     interpretationType: keyof typeof AmountInterpretationType;
 };
-
-const formLayout: FormLayout = [
-    [{
-        name: "amount",
-        label: "Amount",
-        type: "number",
-        iconName: "fitness_center"
-    }],
-    [{
-        name: "interpretationType",
-        label: "Interpret amount as...",
-        type: "select",
-        options: Object.keys(AmountInterpretationType),
-        iconName: "comment"
-    }]
-];
 
 type AmountInputProps = {
     unit: string;
@@ -41,18 +25,18 @@ const AmountInput: React.FC<AmountInputProps> = ({
     const initialFormValue: FormValueType = {
         amount: 0,
         //@ts-ignore
-        interpretationType: Object.keys(AmountInterpretationType)[0]
+        interpretationType: Object.values(AmountInterpretationType)[0]
     }
     const [form, setForm] = React.useState(initialFormValue);
 
     // derived properties
     const realValue = (() => {
-        const type = AmountInterpretationType[form.interpretationType];
+        const type = form.interpretationType;
         switch(type) {
             case 0:
                 return form.amount;
             case 1:
-                return capacity - form.amount;
+                return amount - form.amount;
             case 2:
                 return parseFloat((amount - capacity * (form.amount / 100)).toFixed(2));
             default:
@@ -69,13 +53,23 @@ const AmountInput: React.FC<AmountInputProps> = ({
 
     return (
         <div className="AmountInput-Container">
-            <Form 
-                initialValue={initialFormValue}
-                layout={formLayout}
-                withSubmitButton={false}
-                submitIconName="check"
-                submitButtonText="Consume"
-                setFormValue={form => setForm(form as FormValueType)}
+            <Input 
+                type="number"
+                value={form.amount}
+                name="amount"
+                label="Amount"
+                onChange={v => setForm({...form, amount: parseFloat(v as string) || 0})}
+            />
+            <p>Interpret amount as...</p>
+            <ChipSelect 
+            
+                options={Object.keys(AmountInterpretationType).map(key => ({
+                    label: key,
+                    value: AmountInterpretationType[key]
+                }))}
+                value={form.interpretationType} 
+                //@ts-ignore
+                onSelect={v => setForm({...form, interpretationType: v})}
             />
             <div className="AmountInput-Summary">
                 Remaining: {'  '}

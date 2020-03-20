@@ -4,6 +4,7 @@ import { withRouter, RouteComponentProps } from 'react-router';
 import GenericCard, { GenericCardExtraProps } from '../GenericCard';
 import ContainerOverview from './ContainerOverview';
 import { FoodContainer } from '../../data/typedefs';
+import "./style.scss";
 
 type FoodCardProps = GenericCardExtraProps & {
     name: string,
@@ -34,14 +35,21 @@ const FoodCard: React.FC<FoodCardProps & RouteComponentProps<any>> = ({
          "No containers" :
          <ContainerOverview containers={containers} />;
 
-    const cardStyle = info.understock ? {backgroundColor: 'rgba(255, 0, 0, 0.3)'} : {};
+    
+    // const cardStyle = info.understock ? {backgroundColor: 'rgba(255, 0, 0, 0.3)'} : {};
     return (
         <GenericCard 
             mainText={name} 
-            rightComponent={rightComponent} 
+            rightComponent={info.understock ? (
+                <div className="FoodCard-RightComponent">
+                    {rightComponent}
+                    <div className="FoodCard-UnderstockText">
+                        Understock
+                    </div>
+                </div>
+            ) : rightComponent} 
             smallComponent={smallComponent} 
-            onClick={onClick} 
-            style={cardStyle}
+            onClick={onClick}
             {...props}
         />
     );
