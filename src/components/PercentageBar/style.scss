@@ -1,38 +1,41 @@
 @import "../../App.scss";
-$animationDuration: 0.6s;
-$mainColor: map-get($colors , "info");
 
-.PercentageBar {
-    flex: 1;
-    display: grid;
-    // flex-direction: row;
-    // align-items: flex-start;
-    background-color: rgba(255, 255, 255, 0.3);
-    height: 8px;
-    margin-left: 8px;
-    animation-iteration-count: 1;
-    div {
+@mixin PercentageBarColor($color) {
+    $animationDuration: 0.6s;
+    $mainColor: map-get($colors, $color);
+    .PercentageBar-#{$color} {
+        flex: 1;
+        display: grid;
+        background-color: rgba(255, 255, 255, 0.3);
         height: 8px;
-    }
-    :nth-child(1) {
-        animation-name: percentageBar;
-        animation-duration: $animationDuration;
-        background-color: $mainColor;
-    }
+        margin-left: 8px;
+        animation-iteration-count: 1;
+        div {
+            height: 8px;
+        }
 
-    :nth-child(2) {
-        animation-name: percentageBar;
-        animation-delay: $animationDuration;
-        animation-duration: $animationDuration;
-        background: repeating-linear-gradient(
-            -45deg,
-            transparent,
-            transparent 25%,
-            $mainColor 25%,
-            $mainColor 50%,
-            transparent 50%
-        ) top left fixed;
-        background-size: 30px 30px;
+        // solid color bar indicating amount left
+        :nth-child(1) {
+            animation-name: percentageBar;
+            animation-duration: $animationDuration;
+            background-color: $mainColor;
+        }
+        
+        // strip color bar indicated difference between amounts
+        :nth-child(2) {
+            animation-name: percentageBar;
+            animation-delay: $animationDuration;
+            animation-duration: $animationDuration;
+            background: repeating-linear-gradient(
+                -45deg,
+                transparent,
+                transparent 25%,
+                $mainColor 25%,
+                $mainColor 50%,
+                transparent 50%
+            ) top left fixed;
+            background-size: 30px 30px;
+        }
     }
 }
 
@@ -47,3 +50,7 @@ $mainColor: map-get($colors , "info");
         transform: scaleX(1);
     }
 }
+
+@include PercentageBarColor("info");
+@include PercentageBarColor("text");
+@include PercentageBarColor("red");

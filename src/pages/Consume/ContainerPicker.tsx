@@ -119,15 +119,10 @@ const ContainerPicker: React.FC<ContainerPickerProps> = ({
 
     return (
         <div className="ContainerPicker-Container">
-            <StickyBox offsetTop={-8}>
-                <div style={{paddingTop: 8}}>
-                    Selecting containers for:
-                    <FoodCard 
-                        name={name} unit={unit} 
-                        containers={containers as unknown as FoodContainer[]} 
-                        info={info} />
-                </div>
-            </StickyBox>
+            <div>
+                {foodName}
+            </div>
+            <br/>
             Container #{containerInd + 1} of {containers.length}
             <div style={{paddingLeft: 24, paddingRight: 24}}>
                 <Slider dots infinite={false} 

@@ -1,8 +1,6 @@
 import React from 'react';
 import "./style.scss";
 
-
-const backgroundColor = 'rgba(255, 255, 255, 0.3)';
 type PercentageBarProps = {
     percentageLeft: number,
     percentageDifference?: number,
@@ -11,7 +9,7 @@ type PercentageBarProps = {
 const PercentageBar: React.FC<PercentageBarProps> = ({
     color, percentageLeft, percentageDifference = 0
 }) => (
-    <div className="PercentageBar" style={{ 
+    <div className={`PercentageBar-${color}`} style={{ 
         gridTemplateColumns: (() => {
             const s = `${percentageLeft - percentageDifference}% ${percentageDifference}% ${100 - percentageLeft}%`;
             console.log(s);

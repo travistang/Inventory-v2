@@ -13,6 +13,11 @@ export type PendingConsumeOrder = {
     amount: number
 }
 
+type SelectFoodForm = {
+    selectedFood: string | null,
+    container: FoodContainer | null,
+    amount: number
+}
 type SelectFoodPopupProps = {
     open: boolean;
     requestClose: () => void;
@@ -22,8 +27,18 @@ type SelectFoodPopupProps = {
 const SelectFoodPopup: React.FC<SelectFoodPopupProps> = ({
     open, requestClose, onConsumeOrderAdded
 }) => {
-    const [selectedFood, setSelectedFood] = React.useState(null as string | null);
+    // const [selectedFood, setSelectedFood] = React.useState(null as string | null);
     
+    const [ form, setForm ] = React.useState({
+        selectedFood: null,
+        container: null,
+        amount: 0
+    } as SelectFoodForm);
+
+    const setFormField = (name: string, value : string | number) => (
+        setForm({ ...form, [name]: value})
+    );
+
     const headerTitle = (step: number) => {
         switch(step) {
             case 0:
@@ -39,7 +54,7 @@ const SelectFoodPopup: React.FC<SelectFoodPopupProps> = ({
 
     const reportConsumeOrder = (container: FoodContainer, amount: number) => {
         onConsumeOrderAdded({
-            food: selectedFood as string,
+            food: form.selectedFood as string,
             container,
             amount
         });
@@ -54,13 +69,16 @@ const SelectFoodPopup: React.FC<SelectFoodPopupProps> = ({
                 return (
                     <FoodTypePicker
                         filterFood={food => food.containers.length > 0} 
-                        onFoodSelected={food => {setSelectedFood(food); setStep(1)}} 
+                        onFoodSelected={food => {
+                            setFormField("selectedFood", food); 
+                            setStep(1);
+                        }} 
                     />
                 );
             case 1:
-                return (
+                return form.selectedFood && (
                     <ContainerPicker 
-                        food={selectedFood}
+                        food={form.selectedFood}
                         onToPreviousPage={() => setStep(0)}
                         onSelectContainer={(container, amount) => {
                             reportConsumeOrder(container, amount); 
