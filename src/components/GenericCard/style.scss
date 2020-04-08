@@ -8,8 +8,6 @@ $height: 64px;
     display: flex;
     flex-direction: row;
     padding: 16px;
-    // padding-left: 16px;
-    // padding-right: 16px;
     margin-top: 16px;
     margin-bottom: 16px;
     background-color: map-get($colors, "primary2");
@@ -17,6 +15,8 @@ $height: 64px;
 
 .GenericCard-MainText {
     font-size: 24px;
+    display: flex;
+    flex-wrap: wrap;
 }
 .GenericCard-Left {
     flex: 1;

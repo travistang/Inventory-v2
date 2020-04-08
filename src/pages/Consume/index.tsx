@@ -47,6 +47,7 @@ const ConsumePage: React.FC = () => {
                     ...pendingConsumeOrders,
                     order
                 ])}
+                pendingConsumeOrders={pendingConsumeOrders}
             />
             <CenterNoticeSwitch 
                 watch={pendingConsumeOrders}

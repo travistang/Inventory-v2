@@ -15,7 +15,8 @@ type FoodCardProps = GenericCardExtraProps & {
         numberOfContainers: number,
         understock?: boolean
     },
-    onClick?: () => void
+    onClick?: () => void,
+    additionalText?: string
 };
 
 const SmallInfo = ({ 
@@ -28,18 +29,26 @@ const SmallInfo = ({
 );
 
 const FoodCard: React.FC<FoodCardProps & RouteComponentProps<any>> = ({
-    name, unit, info, onClick, containers, ...props
+    name, unit, info, onClick, containers, 
+    additionalText,
+    ...props
 }) => {
     const rightComponent = <SmallInfo value={`${info.totalAmount} ${unit}`} style={{fontSize: 18}} />;
     const smallComponent = !info.numberOfContainers ?
          "No containers" :
          <ContainerOverview containers={containers} />;
 
-    
-    // const cardStyle = info.understock ? {backgroundColor: 'rgba(255, 0, 0, 0.3)'} : {};
     return (
         <GenericCard 
-            mainText={name} 
+            mainText={ additionalText ? (
+                <>
+                    {name}
+                    <div className="FoodCard-AdditionalText">
+                        { additionalText }
+                    </div>
+                </>
+            ) : name
+            } 
             rightComponent={info.understock ? (
                 <div className="FoodCard-RightComponent">
                     {rightComponent}

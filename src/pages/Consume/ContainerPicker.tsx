@@ -67,10 +67,12 @@ type ContainerPickerProps = {
     food: string | null;
     onToPreviousPage: () => void;
     onSelectContainer: (container: FoodContainer, amount: number) => void;
+    selectedContainerIds: string[];
 };
 
 const ContainerPicker: React.FC<ContainerPickerProps> = ({
-    food: foodName, onSelectContainer, onToPreviousPage
+    food: foodName, onSelectContainer, onToPreviousPage,
+    selectedContainerIds
 }) => {
     
     const { loading, error, data, refetch } = useQuery(CONTAINER_QUERY, {
@@ -89,7 +91,7 @@ const ContainerPicker: React.FC<ContainerPickerProps> = ({
             });
         }
         setContainerInd(0);
-    }, [foodName]);
+    }, [foodName, refetch]);
 
     if (loading) {
         return null;
@@ -101,12 +103,12 @@ const ContainerPicker: React.FC<ContainerPickerProps> = ({
     }
 
     const food = data.food as QueryResultType;
-
     const {
         name, unit, containers, info
     } = food;
 
     const selectedContainer = containers[containerInd];
+    const isContainerSelected = selectedContainerIds.indexOf(selectedContainer.id) > -1;
 
     const onConfirmInfo = () => {
         onSelectContainer(selectedContainer, amountUsed);
@@ -129,34 +131,40 @@ const ContainerPicker: React.FC<ContainerPickerProps> = ({
                     afterChange={containerId => setContainerInd(containerId)}>
                     {
                         food.containers.map(
-                            (container, i) => (<ContainerCard
-                                key={i} 
-                                container={container} 
-                                unit={food.unit} 
-                            />)
+                            (container, i) => (
+                                <ContainerCard
+                                    key={i} 
+                                    container={container} 
+                                    unit={food.unit} 
+                                />
+                            )
                         )
                     }
                 </Slider>
             </div> 
             <div className="ContainerPicker-AmountInputContainer">
                 {
-                    selectedContainer && (
+                    selectedContainer && ( isContainerSelected ? (
+                        <div className="ContainerPicker-SelectedNotice">
+                            <div>Container selected</div>
+                        </div>
+                    ) : (
                         <AmountInput
                             unit={food.unit}
                             amount={selectedContainer.amount} 
                             capacity={selectedContainer.capacity}
                             onAmountChosen={amount => setAmountUsed(amount)}
                         />
-                    )
+                    ))
                 }
             </div>
             <div className="ContainerPicker-ButtonRow">
                 <Button title="Previous" icon="refresh" color="secondary"
                     onClick={onToPreviousPage} 
                 />
-                <Button title="Confirm"  icon="check" 
+                <Button title="Confirm" icon="check" 
                     color="info"
-                    disabled={!isAmountValid()}
+                    disabled={!isAmountValid() || isContainerSelected}
                     onClick={onConfirmInfo}
                 />
             </div>

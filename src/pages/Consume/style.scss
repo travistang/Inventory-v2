@@ -6,6 +6,7 @@
 
     display: flex;
     flex-direction: column;
+    flex: 1;
 }
 
 .ContainerPicker-FoodPreview {
@@ -15,6 +16,7 @@
 
 .ContainerPicker-AmountInputContainer {
     padding-bottom: 64px;
+    flex: 1;
 }
 
 .ContainerPicker-SliderContainer {
@@ -34,6 +36,27 @@
     div {
         flex: 1;
     }
+}
+
+.ContainerPicker-SelectedNotice {
+    $highlightColors: map-get($colors, "info");
+
+    height: 100%;
+    width: 100%;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    
+    div {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 4px;
+        color: $highlightColors;
+        border: 1px solid $highlightColors;
+    }
+    
 }
 
 .AmountInput-Container {

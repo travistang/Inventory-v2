@@ -10,7 +10,7 @@ export type GenericCardExtraProps = {
 };
 
 export type GenericCardProps = GenericCardExtraProps & {
-    mainText: string,
+    mainText: string | React.ReactNode,
     rightComponent: React.ReactNode,
     smallComponent?: React.ReactNode,
     onClick?: () => void,
@@ -34,7 +34,13 @@ const GenericCard: React.FC<GenericCardProps> = ({
                 )
             }
             <div className="GenericCard-Left">
-                <div className="GenericCard-MainText">{mainText}</div>
+                <div className="GenericCard-MainText">
+                    {typeof mainText === 'string' ? mainText : (
+                        <>
+                            { mainText }
+                        </>
+                    )}
+                </div>
                 <div className="GenericCard-containers">
                     { smallComponent }
                 </div>

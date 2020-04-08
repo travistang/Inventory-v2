@@ -18,17 +18,27 @@ type SelectFoodForm = {
     container: FoodContainer | null,
     amount: number
 }
+
 type SelectFoodPopupProps = {
     open: boolean;
     requestClose: () => void;
     onConsumeOrderAdded: (order: PendingConsumeOrder) => void;
+    pendingConsumeOrders: PendingConsumeOrder[];
 }
 
 const SelectFoodPopup: React.FC<SelectFoodPopupProps> = ({
-    open, requestClose, onConsumeOrderAdded
+    open, requestClose, onConsumeOrderAdded, 
+    pendingConsumeOrders
 }) => {
-    // const [selectedFood, setSelectedFood] = React.useState(null as string | null);
-    
+    // all the ids of the containers that are added to pending orders
+    const selectedContainerIds = pendingConsumeOrders.map(order => order.container.id);
+
+    // the number of food of which containers are chosen
+    const foodCounts = pendingConsumeOrders.reduce((counter, order) => ({
+        ...counter,
+        [order.food]: (counter[order.food] || 0) + 1
+    }), {} as {[key: string]: number});
+
     const [ form, setForm ] = React.useState({
         selectedFood: null,
         container: null,
@@ -68,6 +78,7 @@ const SelectFoodPopup: React.FC<SelectFoodPopupProps> = ({
             case 0:
                 return (
                     <FoodTypePicker
+                        foodCounts={foodCounts}
                         filterFood={food => food.containers.length > 0} 
                         onFoodSelected={food => {
                             setFormField("selectedFood", food); 
@@ -80,6 +91,7 @@ const SelectFoodPopup: React.FC<SelectFoodPopupProps> = ({
                     <ContainerPicker 
                         food={form.selectedFood}
                         onToPreviousPage={() => setStep(0)}
+                        selectedContainerIds={selectedContainerIds}
                         onSelectContainer={(container, amount) => {
                             reportConsumeOrder(container, amount); 
                             setStep(2);

@@ -37,10 +37,11 @@ type QueryResultType = {
 
 type FoodTypePickerProps = {
     onFoodSelected: (food: string) => void
-    filterFood?: (food: QueryResultType) => boolean
+    filterFood?: (food: QueryResultType) => boolean,
+    foodCounts?: {[key: string]: number}
 };
 const FoodTypePicker: React.FC<FoodTypePickerProps> = ({
-    onFoodSelected, filterFood
+    onFoodSelected, filterFood, foodCounts = {}
 }) => {
 
     const { loading, error, data, refetch } = useQuery(GET_FOOD_LIST);
@@ -96,7 +97,11 @@ const FoodTypePicker: React.FC<FoodTypePickerProps> = ({
                     }}
                     minimumSearchLength={1}
                     renderItem={food => (
-                        <FoodCard {...food} onClick={() => onFoodSelected(food.name)} />
+                        <FoodCard 
+                            {...food} 
+                            onClick={() => onFoodSelected(food.name)}
+                            additionalText={foodCounts[food.name] && `${foodCounts[food.name]} selected`}
+                        />
                     )}
                 />
             </CenterNoticeSwitch>
