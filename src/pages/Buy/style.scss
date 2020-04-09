@@ -35,7 +35,7 @@
     justify-content: space-between;
     padding-left: 24px;
     padding-right: 24px;
-    .Button:nth-last-child(1) {
+    .Button:nth-child(2) {
         // flex: 1;
         flex-direction: row-reverse;
         color: map-get($colors , "info");

@@ -34,7 +34,7 @@ $textColor: map-get($colors, "text");
     display: grid;
     // maximum 4 rows
     // width: 100%;
-    grid-template-columns: repeat(auto-fit, minmax(48px, 1fr));
+    grid-template-columns: 1fr 1fr;
     gap: 8px;
     flex-wrap: wrap;
     justify-content: flex-start;

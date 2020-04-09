@@ -159,11 +159,11 @@ const ContainerPicker: React.FC<ContainerPickerProps> = ({
                 }
             </div>
             <div className="ContainerPicker-ButtonRow">
-                <Button title="Previous" icon="refresh" color="secondary"
+                <Button title="Previous" icon="refresh" color=""
                     onClick={onToPreviousPage} 
                 />
                 <Button title="Confirm" icon="check" 
-                    color="info"
+                    color=""
                     disabled={!isAmountValid() || isContainerSelected}
                     onClick={onConfirmInfo}
                 />
