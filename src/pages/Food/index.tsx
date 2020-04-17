@@ -1,7 +1,6 @@
 import React from 'react';
 import FoodCard from '../../components/FoodCard';
 import { withHeader } from '../Header';
-import { useLocation } from 'react-router-dom';
 import history from '../../history';
 import { Food } from '../../data/typedefs';
 import SearchList from '../../components/SearchList';
@@ -37,8 +36,8 @@ const FoodPage: React.FC<FoodPageProps> = () => {
     const { loading, error, data, refetch } = useQuery(QUERY);
 
     React.useEffect(() => {
-        refetch()
-    }, [window.location.pathname]);
+        refetch();
+    }, [refetch]);
 
     if (error) {
         alert(error.message);

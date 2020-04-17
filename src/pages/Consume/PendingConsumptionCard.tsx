@@ -2,7 +2,6 @@ import React from 'react';
 import { Icon } from '@material-ui/core';
 import GenericCard from '../../components/GenericCard';
 import PercentageBar from '../../components/PercentageBar';
-import { Food, FoodContainer } from '../../data/typedefs';
 import { PendingConsumeOrder } from './SelectFoodPopup';
 import { gql } from '@apollo/client';
 import { useQuery } from '@apollo/react-hooks';
@@ -25,7 +24,7 @@ const PendingConsumptionCard: React.FC<PendingConsumptionCardProps> = ({
     
     React.useEffect(() => {
         refetch({ food });
-    }, [food]);
+    }, [food, refetch]);
 
     if (loading) {
         return null;

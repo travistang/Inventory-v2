@@ -79,7 +79,7 @@ export const withHeader = (WrappedComponent : React.FC<any>, newNavOptions : Hea
         const {setNavOptions} = useHeader();
         React.useEffect(() => {
             setNavOptions(newNavOptions);
-        }, []);
+        }, [setNavOptions]);
 
         return <WrappedComponent {...props} />
     }

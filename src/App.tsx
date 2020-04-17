@@ -1,7 +1,7 @@
 import React from 'react';
-import Playground from './components/playground';
+// import Playground from './components/playground';
 import {
-  Router, Switch, Route, useLocation, BrowserRouter
+  Router, Switch, Route, useLocation
 } from 'react-router-dom';
 import history from './history';
 import NavBar from './pages/Navbar';
@@ -17,8 +17,6 @@ import SettingsPage from './pages/Settings';
 import BuyPage from './pages/Buy';
 import ConsumePage from './pages/Consume';
 
-import store from './reducers';
-import  {Provider} from 'react-redux';
 import Routes, { PageNames } from './routes';
 import { HeaderContainer } from './pages/Header';
 
@@ -63,7 +61,6 @@ const App: React.FC = () => {
   return (
     <ApolloProvider client={client}>
       <div className="App">
-        <Provider store={store}>
             <Router history={history}>
                 <HeaderContainer>
                   <div className="Page">
@@ -75,7 +72,6 @@ const App: React.FC = () => {
                 <ToastContainer />
                 <NavBar />
             </Router>
-        </Provider>
       </div>
     </ApolloProvider>
   );

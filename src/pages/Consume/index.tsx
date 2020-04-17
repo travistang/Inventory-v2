@@ -37,7 +37,7 @@ const ConsumePage: React.FC = () => {
                 onClick: () => setOpenSelectPopup(true)
             }]
         });
-    }, []);
+    }, [setNavOptions]);
     return (
         <>
             <SelectFoodPopup 

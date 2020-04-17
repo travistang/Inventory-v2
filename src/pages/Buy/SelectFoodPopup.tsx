@@ -2,7 +2,6 @@ import React from 'react';
 import { BuyOrder, Currency, Price } from '../../data/typedefs';
 import { roundNumber } from "../../utils";
 import FoodTypePicker from "../../components/FoodTypePicker";
-import FoodQuantityInfo from "./FoodQuantityInfo";
 import Button from '../../components/Button';
 import CenterNotice from '../../components/CenterNotice';
 import Wizard from '../../components/Wizard';
@@ -74,7 +73,7 @@ const SelectFoodPopup: React.FC<SelectFoodPopupProps> = ({
     
     React.useEffect(() => {
         setForm(initialFormValue);
-    }, [open]);
+    }, [open, initialFormValue]);
 
     if (!open)return null;
 

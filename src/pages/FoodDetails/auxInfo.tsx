@@ -1,6 +1,5 @@
 import React from 'react';
 import { ValueTypes } from '../../components/Input';
-import { Icon } from '@material-ui/core';
 
 export type AuxInfoProps = {
     title: string,

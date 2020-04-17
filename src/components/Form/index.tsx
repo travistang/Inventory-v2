@@ -2,10 +2,9 @@ import React from 'react';
 import { shallowEqual, useSelector } from 'react-redux';
 import { useHistory , useLocation } from 'react-router';
 import { History, Location } from 'history';
-import {Icon} from '@material-ui/core';
 import { State } from '../../reducers';
 import Button from '../Button';
-import Input, { InputConfigProps, SelectConfigProps, ValueTypes, InputTypes } from '../Input';
+import Input, { InputConfigProps, SelectConfigProps, ValueTypes } from '../Input';
 import './style.scss';
 
 // The representation of the form value as JSON

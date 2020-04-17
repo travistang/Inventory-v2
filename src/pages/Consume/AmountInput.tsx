@@ -1,6 +1,5 @@
 import React from 'react';
-import Form, { FormLayout } from '../../components/Form';
-import Input, { ChipSelect, ValueTypes } from '../../components/Input';
+import Input, { ChipSelect } from '../../components/Input';
 const AmountInterpretationType : {[key: string]: number} = {
     "Amount Used": 0,
     "Amount Left": 1,

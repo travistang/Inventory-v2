@@ -2,12 +2,11 @@ import React from 'react';
 import { History, Location } from 'history';
 import { RawUnit } from '../../data/typedefs';
 import { toast } from 'react-toastify';
-import Routes from '../../routes';
 import { withHeader } from '../Header';
 import Form, { FormLayout, FormValueType } from '../../components/Form';
 import { State } from '../../reducers';
 import { gql } from '@apollo/client';
-import { useQuery, useMutation } from '@apollo/react-hooks';
+import { useMutation } from '@apollo/react-hooks';
 import { useHistory } from 'react-router';
 
 const ADD_FOOD_QUERY = gql`
@@ -19,13 +18,13 @@ const ADD_FOOD_QUERY = gql`
     }
 `;
 
-const GET_FOOD_NAMES_QUERY = gql`
-    query {
-        foods @client {
-            name
-        }
-    }
-`;
+// const GET_FOOD_NAMES_QUERY = gql`
+//     query {
+//         foods @client {
+//             name
+//         }
+//     }
+// `;
 
 export const formLayout: FormLayout = (
     { foods }:  State, 
@@ -57,7 +56,6 @@ export const formLayout: FormLayout = (
 
 const CreateFoodPage: React.FC = () => {
     const history = useHistory();
-    const { loading: loadingFoodList, error, data } = useQuery(GET_FOOD_NAMES_QUERY);
     
     const  [updateFoodFunc] = useMutation(ADD_FOOD_QUERY);
 

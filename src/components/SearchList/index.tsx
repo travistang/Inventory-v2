@@ -54,7 +54,6 @@ const SearchGroup: React.FC<SearchGroupProps<any>> = ({
             </div>
         </div>
     )
-    return null;
 }
 
 export default SearchGroup;

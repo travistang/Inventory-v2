@@ -36,7 +36,7 @@ const BuyPage: React.FC = () => {
                 }
             ]
         });
-    }, []);
+    }, [setNavOptions]);
 
     const [ buyFoodFunc ] = useMutation(ADD_ORDERS);
 
