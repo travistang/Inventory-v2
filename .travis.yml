@@ -3,3 +3,8 @@ node_js:
   - "stable"
 scripts:
   - npm run build
+deploy:
+  provider: script
+  script: npm predeploy && npm run deploy
+  on: 
+    branch: master
