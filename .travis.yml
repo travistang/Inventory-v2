@@ -1,4 +1,8 @@
-language: javascript
+language: node_js
+node_js:
+- 12.10.0
+cache: npm
+
 script:
   - npm install
   - npm run build
