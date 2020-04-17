@@ -1,7 +1,7 @@
 language: node_js
 
 before_install:
-  - npm install npm@12
+  - npm install npm@6.13.4
   - yarn install
 script:
   - npm test
