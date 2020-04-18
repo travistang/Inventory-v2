@@ -94,7 +94,8 @@ const FoodDetailsPage: React.FC = () => {
                 onClick: () => history.push(`${Routes.FOOD_EDIT}&food=${foodName as string}`)
             }]
         });
-    }, [foodName]);
+    // eslint-disable-next-line
+    }, []);
 
     if (loading) {
         return null;
