@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React from 'react';
 import { BuyOrder, Currency, Price } from '../../data/typedefs';
 import { roundNumber } from "../../utils";
@@ -73,7 +74,7 @@ const SelectFoodPopup: React.FC<SelectFoodPopupProps> = ({
     
     React.useEffect(() => {
         setForm(initialFormValue);
-    }, [open, initialFormValue]);
+    }, [open]);
 
     if (!open)return null;
 

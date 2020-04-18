@@ -94,7 +94,7 @@ const FoodDetailsPage: React.FC = () => {
                 onClick: () => history.push(`${Routes.FOOD_EDIT}&food=${foodName as string}`)
             }]
         });
-    }, [setNavOptions, foodName, history, navOptions]);
+    }, [foodName]);
 
     if (loading) {
         return null;

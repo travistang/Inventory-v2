@@ -2,7 +2,8 @@ import {
     Food, FoodContainer, 
     Unit, Price,
     BuyOrder,
-    ConsumeOrder 
+    ConsumeOrder,
+    BuyRecord, ConsumeRecord
 } from './typedefs';
 import { 
     convertToFloat, 
@@ -14,11 +15,14 @@ import {
 export const localStorageKey = 'db';
 
 interface DataBaseType {
-    foods: Array<Food & {[key: string]: any}>
+    // extra object key: value pair is for __typename
+    foods: Array<Food & {[key: string]: any}>;
+    records: Array<(BuyRecord | ConsumeRecord) & {[key: string]: any}> 
 };
 
 export const initialDatabase : DataBaseType = {
-    foods: []
+    foods: [],
+    records: []
 };
 
 const loadDatabase = () => {
@@ -38,10 +42,14 @@ const saveDatabase = (newDb: DataBaseType) => {
 
 export const correctDatabase = () => {
     const db = loadDatabase();
+    // add list if it doesnt exist
     if (!db.foods) {
         db.foods = [];
     }
-
+    if (!db.records) {
+        db.records = [];
+    }
+    
     db.foods.forEach((food, i, foodList) => {
         if (!food.containers) {
             foodList[i].containers = [];
@@ -64,7 +72,12 @@ const resolvers = {
             const db = loadDatabase();
             return db.foods;
         },
+        records: () => {
+            const db = loadDatabase();
+            return db.records;
+        }
     },
+
     FoodContainer: {
         datePurchased: (container: FoodContainer) => {
             return new Date(container.datePurchased);
@@ -120,11 +133,12 @@ const resolvers = {
         }
     },
     Mutation: {
-        addFood: (_: any, { name, unit } : { name: string, unit: Unit}) => {
+        addFood: (_: any, { name, unit, stockLevel } : { name: string, unit: Unit, stockLevel: number | null}) => {
             const db = loadDatabase();
             db.foods.push({
                 __typename: "Food",
                 name, unit,
+                stockLevel: stockLevel === null ? undefined : stockLevel,
                 containers: [],
             });
 
@@ -134,6 +148,8 @@ const resolvers = {
         buyFood: (_: any, { buyOrders } : {buyOrders: BuyOrder[]}) => {
             const db = loadDatabase();
             const newFoodContainers : FoodContainer[] = [];
+            const newRecords: BuyRecord[] = [];
+
             buyOrders.forEach(buyOrder => {
                 const { foodName: name, price, expiryDate, amount } = buyOrder;
                 
@@ -157,8 +173,18 @@ const resolvers = {
                     db.foods[foodId].containers.push(container);
                     newFoodContainers.push(container);
                 }
+                // record the buy orders
+                newRecords.push({
+                    __typename: "BuyRecord",
+                    id: randomString(24),
+                    date: new Date(),
+                    buyOrder
+                } as BuyRecord);
             });
 
+            // append records
+            db.records = [...db.records, ...newRecords];
+ 
             saveDatabase(db);
             return newFoodContainers;
         },
@@ -175,6 +201,32 @@ const resolvers = {
                 };
             });
 
+            // update records' name
+            // only applies to buy records because it contains the name of the food
+            const newFoodName = newData.name;
+            if ( originalName !== newFoodName) {
+                db.records = db.records.map(record => {
+                    // Buy order changes
+                    if (record?.buyOrder.foodName === originalName) {
+                        return {
+                            ...record,
+                            buyOrder: {
+                                ...record.buyOrder,
+                                foodName: newFoodName
+                            }
+                        }
+                    } 
+                    // Consume order changes
+                    else if (record?.foodName === originalName) {
+                        return {
+                            ...record,
+                            foodName: newFoodName
+                        }
+                    }
+                    // this order isnt about the food being editing
+                    else return record;
+                })
+            }
             saveDatabase(db);
             return newData;
         },
@@ -182,6 +234,8 @@ const resolvers = {
         consumeFoods: (_: any, { consumeOrders }: {consumeOrders: ConsumeOrder[]}) => {
             const db = loadDatabase();
             let hasError = false;
+            const newConsumeRecords: ConsumeRecord[] = [];
+
             consumeOrders.forEach(order => {
                 const { containerID, amount } = order;
                 const foodId = db.foods.findIndex(
@@ -215,9 +269,20 @@ const resolvers = {
                 if (remainingAmount / capacity < 0.01) {
                     db.foods[foodId].containers = db.foods[foodId].containers.filter((_, i) => i !== containerIndex);
                 }
+
+                // add records to the array
+                newConsumeRecords.push({
+                    __typename: "ConsumeRecord",
+                    id: randomString(24),
+                    date: new Date(),
+                    consumeOrder: order,
+                    foodName: db.foods[foodId].name
+                } as ConsumeRecord);
             });
 
             if (!hasError) {
+                // append records here
+                db.records = [...db.records, ...newConsumeRecords];
                 saveDatabase(db);
             }
             return hasError ? 

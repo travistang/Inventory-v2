@@ -77,6 +77,19 @@ export interface ConsumeOrder {
     containerID: string,
     amount: number
 }
+export interface Record {
+    id: string,
+    date: Date
+}
+
+export interface BuyRecord extends Record {
+    buyOrder: BuyOrder
+}
+
+export interface ConsumeRecord extends Record {
+    consumeOrder: ConsumeOrder,
+    foodName: string
+}
 
 export const typeDefs = `
     enum Currency {
@@ -92,7 +105,24 @@ export const typeDefs = `
         unit
     }
 
-
+    interface Record {
+        id: ID!
+        date: Date!
+    }
+    
+    type BuyRecord implements Record {
+        id: ID!
+        date: Date!
+        buyOrder: BuyOrder!
+    }
+    
+    type ConsumeRecord implements Record {
+        id: ID!
+        date: Date!
+        consumeOrder: ConsumeOrder!
+        foodName: String!
+    }
+    
     type Price {
         currency: Currency!
         amount: Number!
@@ -152,6 +182,7 @@ export const typeDefs = `
     type Query {
         food(name: String!): Food
         foods: [Food]!
+        records: [Record]!
     }
 
     type Mutation {
