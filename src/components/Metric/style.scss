@@ -1,0 +1,25 @@
+.Metric-Container {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: center;
+
+    // min-width: 30vw;
+}
+span.Metric-Icon {
+    font-size: calc(min(16vw, 72px));
+}
+
+.Metric-Right {
+    display: flex;
+    flex-direction: column; 
+    padding-left: 4px;  
+    .Metric-Value {
+        flex: 1;
+        font-size: calc(min(5vw, 22px));
+    }
+}
+
+.Metric-Name {
+    font-size: 12px;
+}

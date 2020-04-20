@@ -1,0 +1,72 @@
+@import "../../App.scss";
+
+.RecordPage-Container {
+    display: flex;
+    flex-direction: column;
+    overflow-y: scroll;
+}
+.RecordList-Container {
+    flex: 1;
+    overflow-y: scroll;
+}
+
+.Record-Container {
+    display: flex;
+    flex-direction: row;
+    
+    .Record-SideContainer:nth-child(1) {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-size: 96px;
+        margin-right: 8px;
+    }
+    margin: 16px 0;
+}
+
+.Record-Inner {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.Record-Name {
+    color: map-get($colors, "info");
+}
+
+.Record-Date {
+    color: map-get($colors, "primary3");
+}
+
+.Record-SideContainer {
+    min-width: 10vw;
+}
+
+.Record-Price-Buy {
+    color: green;
+}
+
+.Record-Price-Consume {
+    color: red;
+}
+
+// Records Summary
+.RecordSummary-Container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;
+    // padding: 20px;
+    padding-bottom: 48px;
+}
+
+.RecordSummary-Cell {
+    // flex: 1;
+    margin: 8px 0px;
+}
+
+.RecordSummary-CellValue {
+    font-size: calc(min(5vw, 16px));
+    font-weight: bold;
+}
+

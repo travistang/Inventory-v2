@@ -12,7 +12,6 @@ const PercentageBar: React.FC<PercentageBarProps> = ({
     <div className={`PercentageBar-${color}`} style={{ 
         gridTemplateColumns: (() => {
             const s = `${percentageLeft - percentageDifference}% ${percentageDifference}% ${100 - percentageLeft}%`;
-            console.log(s);
             return s;
         })()
     }}>

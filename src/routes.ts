@@ -9,6 +9,7 @@ export const PageNames = {
     CONTAINERS_LIST: "containers",
     SETTINGS: "settings",
     CONSUME: "consume",
+    RECORDS: "records",
     HOME: ""
 };
 
@@ -24,6 +25,8 @@ const Routes = {
     SETTINGS: "/app?page=settings",
 
     CONSUME: "/app?page=consume",
+    RECORDS: "/app?page=records",
+
     HOME: "/app"
 }
 

@@ -6,10 +6,10 @@ import "./style.scss";
 
 const navItems: Array<NavIconProps & {tag: string[]}> = [
     {
-        title: "Assets",
-        icon: "work-outline",
-        path: Routes.CONTAINERS_LIST,
-        tag: [PageNames.CONTAINERS_LIST]
+        title: "Records",
+        icon: "history",
+        path: Routes.RECORDS,
+        tag: [PageNames.RECORDS]
     },
     {
         title: "Consume",

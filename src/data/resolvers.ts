@@ -72,12 +72,14 @@ const resolvers = {
             const db = loadDatabase();
             return db.foods;
         },
-        records: () => {
+        records: (_: any, { type }: { type: string }) => {
             const db = loadDatabase();
-            return db.records;
+            return db.records.filter(({ __typename }) => __typename === type);
         }
     },
-
+    Price: {
+        __typename: (_ : Price) => "Price" 
+    },
     FoodContainer: {
         datePurchased: (container: FoodContainer) => {
             return new Date(container.datePurchased);
@@ -135,14 +137,17 @@ const resolvers = {
     Mutation: {
         addFood: (_: any, { name, unit, stockLevel } : { name: string, unit: Unit, stockLevel: number | null}) => {
             const db = loadDatabase();
-            db.foods.push({
+
+            const newRecord = {
                 __typename: "Food",
                 name, unit,
                 stockLevel: stockLevel === null ? undefined : stockLevel,
                 containers: [],
-            });
+            };
+            db.foods.push(newRecord);
 
             saveDatabase(db);
+            return newRecord;
         },
 
         buyFood: (_: any, { buyOrders } : {buyOrders: BuyOrder[]}) => {
@@ -178,7 +183,10 @@ const resolvers = {
                     __typename: "BuyRecord",
                     id: randomString(24),
                     date: new Date(),
-                    buyOrder
+                    buyOrder: {
+                        __typename: "BuyOrder",
+                        ...buyOrder
+                    }
                 } as BuyRecord);
             });
 
@@ -270,13 +278,19 @@ const resolvers = {
                     db.foods[foodId].containers = db.foods[foodId].containers.filter((_, i) => i !== containerIndex);
                 }
 
+                // Compute the equivalent price for storage
+                const equivalentPrice = new Price(
+                    container.price.amount / capacity * amount,
+                    container.price.currency
+                );
                 // add records to the array
                 newConsumeRecords.push({
                     __typename: "ConsumeRecord",
                     id: randomString(24),
                     date: new Date(),
                     consumeOrder: order,
-                    foodName: db.foods[foodId].name
+                    foodName: db.foods[foodId].name,
+                    equivalentPrice
                 } as ConsumeRecord);
             });
 

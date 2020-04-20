@@ -88,7 +88,8 @@ export interface BuyRecord extends Record {
 
 export interface ConsumeRecord extends Record {
     consumeOrder: ConsumeOrder,
-    foodName: string
+    foodName: string,
+    equivalentPrice: Price
 }
 
 export const typeDefs = `
@@ -121,6 +122,7 @@ export const typeDefs = `
         date: Date!
         consumeOrder: ConsumeOrder!
         foodName: String!
+        equivalentPrice: Price!
     }
     
     type Price {
@@ -182,11 +184,11 @@ export const typeDefs = `
     type Query {
         food(name: String!): Food
         foods: [Food]!
-        records: [Record]!
+        records(type: String!): [BuyRecord | ConsumeRecord]!
     }
 
     type Mutation {
-        addFood(name: String!, unit: Unit!): Food
+        addFood(name: String!, unit: Unit!, stockLevel: Number): Food
         buyFood(buyOrders: [BuyOrder]!): [FoodContainer]
         editFood(originalName: String!, newData: Food!): Food
         consumeFoods(consumeOrders: [ConsumeOrder]!): [ID!]

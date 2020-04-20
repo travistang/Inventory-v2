@@ -16,6 +16,7 @@ import ContainerPage from './pages/Container';
 import SettingsPage from './pages/Settings';
 import BuyPage from './pages/Buy';
 import ConsumePage from './pages/Consume';
+import RecordsPage from './pages/Records';
 
 import Routes, { PageNames } from './routes';
 import { HeaderContainer } from './pages/Header';
@@ -47,10 +48,14 @@ const RouteSwitch: React.FC = () => {
       return <ConsumePage />
     case PageNames.SETTINGS:
       return <SettingsPage />
+    case PageNames.RECORDS:
+      return <RecordsPage />
+
     default:
       return null;
   }
 }
+
 const App: React.FC = () => {
 
   // correct database when the App just loads

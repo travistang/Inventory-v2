@@ -3,4 +3,5 @@ warnings_are_errors: false
 node_js:
   - "stable"
 scripts:
+  - npm run test
   - npm run build

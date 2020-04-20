@@ -34,14 +34,8 @@ type ChipSelectProps = {
 export const ChipSelect: React.FC<ChipSelectProps> = ({
     options, onSelect, value
 }) => {
-    // const [selectedOption, setSelectedOption] 
-    //     = React.useState(null as ValueTypes | null);
-
-    // console.log("chip selected option in chipSelect: " + selectedOption);
 
     const onChipClicked = (value: ValueTypes) => {
-        // console.log('on chip clicked value: ' + value);
-        // setSelectedOption(value);
         onSelect(value);
     }
 
