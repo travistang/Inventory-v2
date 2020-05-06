@@ -1,139 +1,22 @@
+import {
+    convertToFloat, 
+    randomString, 
+    roundNumber, 
+} from '../../utils';
+
 import { 
     Food, FoodContainer, 
     Unit, Price,
     BuyOrder,
     ConsumeOrder,
     BuyRecord, ConsumeRecord
-} from './typedefs';
-import { 
-    convertToFloat, 
-    randomString, 
-    roundNumber, 
-    isTimeInPast 
-} from '../utils';
+} from '../typedefs';
 
-export const localStorageKey = 'db';
+import {
+    loadDatabase, saveDatabase
+} from './db';
 
-interface DataBaseType {
-    // extra object key: value pair is for __typename
-    foods: Array<Food & {[key: string]: any}>;
-    records: Array<(BuyRecord | ConsumeRecord) & {[key: string]: any}> 
-};
-
-export const initialDatabase : DataBaseType = {
-    foods: [],
-    records: []
-};
-
-const loadDatabase = () => {
-    const db = localStorage.getItem(localStorageKey);
-    if (!db) {
-        localStorage.setItem(localStorageKey, 
-            JSON.stringify(initialDatabase));
-            return initialDatabase;
-        } else {
-        return JSON.parse(db) as DataBaseType;
-    }
-};
-
-const saveDatabase = (newDb: DataBaseType) => {
-    return localStorage.setItem(localStorageKey, JSON.stringify(newDb));
-};
-
-export const correctDatabase = () => {
-    const db = loadDatabase();
-    // add list if it doesnt exist
-    if (!db.foods) {
-        db.foods = [];
-    }
-    if (!db.records) {
-        db.records = [];
-    }
-    
-    db.foods.forEach((food, i, foodList) => {
-        if (!food.containers) {
-            foodList[i].containers = [];
-        }
-        if (!food.stockLevel) {
-            food.stockLevel = 0;
-        }
-    });
-    saveDatabase(db);
-}
-
-const resolvers = {
-    Query: {
-        food: (_: any, { name }: { name: string }) => {
-            const db = loadDatabase();
-            const food = db.foods.find(food => food.name === name);
-            return food;
-        },
-        foods: () => {
-            const db = loadDatabase();
-            return db.foods;
-        },
-        records: (_: any, { type }: { type: string }) => {
-            const db = loadDatabase();
-            return db.records.filter(({ __typename }) => __typename === type);
-        }
-    },
-    Price: {
-        __typename: (_ : Price) => "Price" 
-    },
-    FoodContainer: {
-        datePurchased: (container: FoodContainer) => {
-            return new Date(container.datePurchased);
-        },
-        opened: (container: FoodContainer) => {
-           return !!container.dateOpened;
-        },
-        expired: (container: FoodContainer) => {
-            return (!!container.expiryDate) && isTimeInPast(container.expiryDate);
-        },
-        percentageLeft: (container: FoodContainer) => {
-            return container.amount / container.capacity * 100;
-        }
-    },
-    Food: {
-        info: (food: Food) => {
-            const totalAmount = food.containers.reduce(
-                (sum, container) => sum + container.amount, 0
-            );
-            const totalCapacity = food.containers.reduce(
-                (sum, container) => sum + container.capacity, 0
-            );
-            
-            const expiredContainers = food.containers.filter(
-                container => container.expiryDate && new Date(container.expiryDate).getDate() < (new Date()).getDate()
-            ).length;
-
-            const openedContainers = food.containers.filter(
-                container => !!container.dateOpened
-            ).length;
-
-            const totalWorth = food.containers.reduce(
-                (sum, { price }) => sum + new Price(price.amount, price.currency).as("EUR").amount, 
-                0);
-            const numberOfContainers = food.containers.length;
-
-            const percentageLeft = (totalCapacity === 0) ? 
-                0 : 
-                totalAmount / totalCapacity * 100;
-            
-            const understock = food.stockLevel && food.stockLevel > totalAmount;
-
-            return {
-                __typename: "FoodInfo",
-                numberOfContainers,
-                expiredContainers,
-                openedContainers,
-                totalAmount,
-                totalWorth,
-                percentageLeft,
-                understock
-            };
-        }
-    },
+const Mutation = {
     Mutation: {
         addFood: (_: any, { name, unit, stockLevel } : { name: string, unit: Unit, stockLevel: number | null}) => {
             const db = loadDatabase();
@@ -304,5 +187,6 @@ const resolvers = {
                 : null;
         }
     }
-}
-export default resolvers;
+};
+
+export default Mutation;

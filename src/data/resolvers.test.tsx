@@ -211,6 +211,52 @@ describe("Food creation and query", () => {
             expiryDate: buyOrder.expiryDate.toISOString()
         });
     });
+
+    it("Should be able to consume food", async () => {
+        const CONSUME_FOOD = gql`
+            mutation consumeFood($consumeOrders: [ConsumeOrder]!) {
+                consumeFoods(consumeOrders: $consumeOrders) @client
+            }
+        `;
+
+        const QUERY_FOOD = gql`
+            query queryFood($foodName: String!) {
+                food (name: $foodName) @client {
+                    containers {
+                        id
+                        quantity
+                        capacity
+                    }
+                }
+            }
+        `;
+
+        const { data: foodRecord } = await client.query({
+            query: QUERY_FOOD
+        });
+
+        const { data: consumeFoodResult } = await client.mutate({
+            mutation: CONSUME_FOOD,
+            variables: {
+                consumeOrders: [
+                    {
+                        containerID: foodRecord?.food?.containers?.[0].id,
+                        amount: 1
+                    }
+                ]
+            }
+        });
+
+        const { data: foodRecordAfterConsume } = await client.query({
+            query: QUERY_FOOD
+        });
+
+        expect(consumeFoodResult[0]).toBe(foodRecord?.food?.containers?.[0].id);
+
+        const { quantity, capacity } = foodRecordAfterConsume.food.containers[0];
+        expect(capacity - quantity).toBe(1);
+    });
+
 });
 
 

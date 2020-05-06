@@ -148,7 +148,14 @@ export const typeDefs = `
         percentageLeft: Number!
     }
 
+    type AmountRecord {
+        date: Date!
+        amount: Number
+    }
+
     type FoodInfo {
+        amountRecords: [AmountRecord]!
+        
         numberOfContainers: Number!
         expiredContainers: Number!
         openedContainers: Number!
@@ -192,5 +199,6 @@ export const typeDefs = `
         buyFood(buyOrders: [BuyOrder]!): [FoodContainer]
         editFood(originalName: String!, newData: Food!): Food
         consumeFoods(consumeOrders: [ConsumeOrder]!): [ID!]
+        deleteRecords(olderThan: Date!): [ID!]
     }
 `;
